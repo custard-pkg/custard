@@ -1,7 +1,9 @@
+use crate::consts::PACKAGE_JSON_NOT_FOUND;
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
 use owo_colors::OwoColorize;
+use std::hint::unreachable_unchecked;
 use std::path::{Path, PathBuf};
 use std::{env, process};
 
@@ -45,18 +47,26 @@ pub fn find_closest_file_or_dir(_current_dir: &Path, name: &str) -> Option<PathB
     closest_file
 }
 
-/// Find the `package.json` file for this project.
+/// Find the `package.json` file for this package.
 ///
 /// Can fail if the recursion limit is reached.
-pub fn find_package_json() -> Result<Option<PathBuf>> {
-    Ok(find_closest_file_or_dir(
-        &env::current_dir().wrap_err("failed to get current dir")?,
-        "package.json",
-    ))
+pub fn find_package_json() -> Result<PathBuf> {
+    Ok(
+        match find_closest_file_or_dir(
+            &env::current_dir().wrap_err("failed to get current dir")?,
+            "package.json",
+        ) {
+            Some(f) => f,
+            _ => {
+                user_error(PACKAGE_JSON_NOT_FOUND, exitcode::NOINPUT);
+                unsafe { unreachable_unchecked() }
+            }
+        },
+    )
 }
 
 /// Prints an user-facing error, and exits.
-pub fn user_error(error: String, exit_code: ExitCode) {
+pub fn user_error(error: &str, exit_code: ExitCode) {
     eprintln!("{} {}", "error:".red().bold(), error.bold());
-    process::exit(exit_code)
+    process::exit(exit_code);
 }

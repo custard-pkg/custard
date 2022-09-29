@@ -1,12 +1,15 @@
+use clap::Parser;
 use color_eyre::eyre::Context;
 use eyre::Result;
 
 mod cli;
 mod commands;
-use commands::*;
-use cli::{Cli, Command::*};
+mod consts;
+mod package_json;
+mod util;
 
-use clap::Parser;
+use cli::{Cli, Command::*};
+use commands::*;
 
 fn main() -> Result<()> {
     color_eyre::install().wrap_err("failed to install color-eyre")?;
@@ -15,7 +18,7 @@ fn main() -> Result<()> {
 
     match cli.command {
         PackageJsonPath => package_json_path::invoke()?,
-        _ => unreachable!()
+        Run { scripts } => run::invoke(scripts)?,
     }
 
     Ok(())
