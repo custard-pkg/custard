@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
-clap-serde = "0.5.0"
 color-eyre = "0.6.2"
 exitcode = "1.1.2"
 eyre = "0.6.8"

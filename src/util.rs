@@ -1,11 +1,13 @@
-use crate::consts::PACKAGE_JSON_NOT_FOUND;
+use std::hint::unreachable_unchecked;
+use std::path::{Path, PathBuf};
+use std::{env, process};
+
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
 use owo_colors::OwoColorize;
-use std::hint::unreachable_unchecked;
-use std::path::{Path, PathBuf};
-use std::{env, process};
+
+use crate::consts::PACKAGE_JSON_NOT_FOUND;
 
 pub const MAX_RECURSION_DEPTH: usize = 8;
 

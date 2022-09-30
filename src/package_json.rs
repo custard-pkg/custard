@@ -1,7 +1,9 @@
-use crate::util::{find_package_json, user_error};
+use std::{collections::HashMap, fs::File, io::Read};
+
 use eyre::{Context, Result};
 use serde::Deserialize;
-use std::{collections::HashMap, fs::File, io::Read};
+
+use crate::util::{find_package_json, user_error};
 
 #[derive(Deserialize)]
 pub struct PackageJson {
