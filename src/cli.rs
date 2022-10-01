@@ -11,7 +11,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Command {
     /// Run a script in `package.json`
-    Run { scripts: Vec<String> },
+    Run { script: String },
 
     /// Show the `package.json` path for this package.
     #[clap(aliases = &["package-json", "package-path"])]

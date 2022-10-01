@@ -18,7 +18,7 @@ fn main() -> Result<()> {
 
     match cli.command {
         PackageJsonPath => package_json_path::invoke()?,
-        Run { scripts } => run::invoke(scripts)?,
+        Run { script } => run::invoke(script)?,
     }
 
     Ok(())
