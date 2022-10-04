@@ -1,11 +1,11 @@
 use eyre::Result;
 use owo_colors::OwoColorize;
 
-use crate::consts::{script_not_found, SCRIPTS_NOT_FOUND};
+use crate::consts::{script_not_found, SCRIPTS_NOT_FOUND, SCRIPT_TERMINATED_BY_SIGNAL, SCRIPT_SIGNAL_EXIT_CODE, script_not_ok};
 use crate::package_json::PackageJson;
 use crate::util::user_error;
 
-use std::process::{Command, ExitStatus};
+use std::process::{Command};
 
 pub fn invoke(script_name: String, args: Option<Vec<String>>) -> Result<()> {
     let args = args.unwrap_or_default();
@@ -41,23 +41,33 @@ pub fn invoke(script_name: String, args: Option<Vec<String>>) -> Result<()> {
 }
 
 fn run_script(name: String, content: &str, args: Vec<String>) -> Result<()> {
-    println!("{} script `{name}`", "Running".green().bold());
+    let content = format!("{content} {}", args.join(" "));
 
-    // Windows does not have `sh`
-    let mut command = if cfg!(target_os = "windows") {
+    println!("{} script `{name}`", "Running".green().bold());
+    println!("\n{}", format!("> {content}").bold());
+
+    let mut command = &mut if cfg!(target_os = "windows") {
         Command::new("cmd")
     } else {
         Command::new("sh")
     };
-
-    // Make the shell quiet
-    let command = if cfg!(target_os = "windows") {
-        command.arg("/C").args(args)
-    } else {
-        command.arg("-c").args(args)
-    };
+    command = command
+        .arg(if cfg!(target_os = "windows") {
+            "/C"
+        } else {
+            "-c"
+        })
+        .arg(content);
 
     let status = command.status()?;
+
+    match status.code() {
+        Some(code) if !status.success() => {
+            user_error(&script_not_ok(code), code);
+        },
+        None => user_error(SCRIPT_TERMINATED_BY_SIGNAL, SCRIPT_SIGNAL_EXIT_CODE),
+        _ => {}
+    }
 
     Ok(())
 }

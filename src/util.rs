@@ -7,9 +7,7 @@ use eyre::Result;
 use eyre::WrapErr;
 use owo_colors::OwoColorize;
 
-use crate::consts::PACKAGE_JSON_NOT_FOUND;
-
-pub const MAX_RECURSION_DEPTH: usize = 8;
+use crate::consts::{PACKAGE_JSON_NOT_FOUND, MAX_RECURSION_DEPTH};
 
 /// Find the closest file/directory with the name you want, to
 /// the `_current_dir` Path.
