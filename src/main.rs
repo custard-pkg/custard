@@ -1,3 +1,5 @@
+#![allow(clippy::enum_glob_use)]
+#![allow(clippy::wildcard_imports)]
 use clap::Parser;
 use color_eyre::eyre::Context;
 use eyre::Result;
@@ -11,7 +13,10 @@ mod util;
 use cli::{Cli, Command::*};
 use commands::*;
 
+rust_i18n::i18n!("locales");
+
 fn main() -> Result<()> {
+    rust_i18n::set_locale("en");
     color_eyre::install().wrap_err("failed to install color-eyre")?;
 
     let cli = Cli::parse();

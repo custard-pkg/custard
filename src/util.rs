@@ -6,8 +6,9 @@ use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
 use owo_colors::OwoColorize;
+use rust_i18n::t;
 
-use crate::consts::{PACKAGE_JSON_NOT_FOUND, MAX_RECURSION_DEPTH};
+use crate::consts::MAX_RECURSION_DEPTH;
 
 /// Find the closest file/directory with the name you want, to
 /// the `_current_dir` Path.
@@ -52,21 +53,20 @@ pub fn find_closest_file_or_dir(_current_dir: &Path, name: &str) -> Option<PathB
 /// Can fail if the recursion limit is reached.
 pub fn find_package_json() -> Result<PathBuf> {
     Ok(
-        match find_closest_file_or_dir(
+        if let Some(f) = find_closest_file_or_dir(
             &env::current_dir().wrap_err("failed to get current dir")?,
             "package.json",
         ) {
-            Some(f) => f,
-            _ => {
-                user_error(PACKAGE_JSON_NOT_FOUND, exitcode::NOINPUT);
-                unsafe { unreachable_unchecked() }
-            }
+            f
+        } else {
+            user_error(t!("package-json-not-found"), exitcode::NOINPUT);
+            unsafe { unreachable_unchecked() }
         },
     )
 }
 
 /// Prints an user-facing error, and exits.
-pub fn user_error(error: &str, exit_code: ExitCode) {
+pub fn user_error(error: String, exit_code: ExitCode) {
     eprintln!("{} {}", "error:".red().bold(), error.bold());
     process::exit(exit_code);
 }

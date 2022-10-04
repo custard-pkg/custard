@@ -1,0 +1,10 @@
+en:
+  # general package.json stuff
+  package-json-not-found: "a `package.json` file was not found in this package."
+  package-json-found-at: "a `package.json` file was found at:"
+
+  # run command
+  scripts-field-not-found: "the `scripts` field was not found in your `package.json` file."
+  script-not-found: "script `%{name}` was not found."
+  script-not-ok: "script exited with exit code %{code}."
+  script-terminated-by-signal: "script was terminated by signal (e.g. Ctrl-C or Cmd-C)"

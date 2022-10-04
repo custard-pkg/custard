@@ -1,11 +1,12 @@
+use std::process::Command;
+
 use eyre::Result;
 use owo_colors::OwoColorize;
+use rust_i18n::t;
 
-use crate::consts::{script_not_found, SCRIPTS_NOT_FOUND, SCRIPT_TERMINATED_BY_SIGNAL, SCRIPT_SIGNAL_EXIT_CODE, script_not_ok};
+use crate::consts::SCRIPT_SIGNAL_EXIT_CODE;
 use crate::package_json::PackageJson;
 use crate::util::user_error;
-
-use std::process::{Command};
 
 pub fn invoke(script_name: String, args: Option<Vec<String>>) -> Result<()> {
     let args = args.unwrap_or_default();
@@ -19,28 +20,31 @@ pub fn invoke(script_name: String, args: Option<Vec<String>>) -> Result<()> {
 
                 // Run prescript...
                 if let Some(script_content) = scripts.get(&pre_script_name) {
-                    run_script(pre_script_name, script_content, vec![])?
+                    run_script(&pre_script_name, script_content, &[])?;
                 }
 
                 // ...then the script itself...
-                run_script(script_name, script_content, args)?;
+                run_script(&script_name, script_content, &args)?;
 
                 // ...and finally the postscript
                 if let Some(script_content) = scripts.get(&post_script_name) {
-                    run_script(post_script_name, script_content, vec![])?
+                    run_script(&post_script_name, script_content, &[])?;
                 }
             }
-            _ => user_error(&script_not_found(&script_name), exitcode::CONFIG),
+            _ => user_error(
+                t!("script-not-found", name = &script_name),
+                exitcode::CONFIG,
+            ),
         },
 
         // The `scripts` field was not found
-        _ => user_error(SCRIPTS_NOT_FOUND, exitcode::CONFIG),
+        _ => user_error(t!("scripts-field-not-found"), exitcode::CONFIG),
     }
 
     Ok(())
 }
 
-fn run_script(name: String, content: &str, args: Vec<String>) -> Result<()> {
+fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
     let content = format!("{content} {}", args.join(" "));
 
     println!("{} script `{name}`", "Running".green().bold());
@@ -63,9 +67,9 @@ fn run_script(name: String, content: &str, args: Vec<String>) -> Result<()> {
 
     match status.code() {
         Some(code) if !status.success() => {
-            user_error(&script_not_ok(code), code);
-        },
-        None => user_error(SCRIPT_TERMINATED_BY_SIGNAL, SCRIPT_SIGNAL_EXIT_CODE),
+            user_error(t!("script-not-ok", code = &code.to_string()), code);
+        }
+        None => user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE),
         _ => {}
     }
 
