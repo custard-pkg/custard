@@ -12,8 +12,7 @@ pub struct Cli {
 pub enum Command {
     /// Run a script in `package.json`
     Run {
-        script: String,
-
+        script: Option<String>,
         args: Option<Vec<String>>,
     },
 
