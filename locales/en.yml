@@ -2,6 +2,7 @@ en:
   # general package.json stuff
   package-json-not-found: "a `package.json` file was not found in this package."
   package-json-found-at: "a `package.json` file was found at:"
+  failed-to-read-package-json: "failed to read `package.json`: %{error}"
 
   # run command
   scripts-field-not-found: "the `scripts` field was not found in your `package.json` file."

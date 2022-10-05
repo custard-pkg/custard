@@ -77,9 +77,13 @@ fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
 
     match status.code() {
         Some(code) if !status.success() => {
+            println!();
             user_error(t!("script-not-ok", code = &code.to_string()), code);
         }
-        None => user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE),
+        None => {
+            println!();
+            user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE)
+        }
         _ => {}
     }
 
