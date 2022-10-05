@@ -7,7 +7,6 @@ use rust_i18n::t;
 mod list;
 mod util;
 
-use list::list_scripts;
 use util::scripts_field_not_found;
 
 use crate::consts::SCRIPT_SIGNAL_EXIT_CODE;
@@ -49,7 +48,7 @@ pub fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<
                 _ => scripts_field_not_found(),
             }
         }
-        _ => list_scripts()?,
+        _ => list::scripts()?,
     }
 
     Ok(())

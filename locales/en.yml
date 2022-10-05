@@ -9,3 +9,5 @@ en:
   script-not-ok: "script exited with exit code %{code}."
   script-terminated-by-signal: "script was terminated by signal (e.g. Ctrl-C or Cmd-C)"
   scripts-in-package: "%{count} in package %{package_name}"
+  no-scripts-added: "no scripts in package %{package_name}"
+  how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."

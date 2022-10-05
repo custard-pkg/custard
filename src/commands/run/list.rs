@@ -7,7 +7,7 @@ use rust_i18n::t;
 use crate::commands::run::util::scripts_field_not_found;
 use crate::package_json::PackageJson;
 
-pub fn list_scripts() -> Result<()> {
+pub fn scripts() -> Result<()> {
     let package_json = PackageJson::from_package_json_file()?;
     let scripts = package_json.scripts;
 
@@ -24,14 +24,24 @@ pub fn list_scripts() -> Result<()> {
             }
 
             println!(
-                "{}",
+                "{}\n{}",
                 t!(
                     "scripts-in-package",
                     count = &format!("{} scripts", &scripts.len()).purple().to_string(),
-                    package_name = &package_json.name
+                    package_name = &format!("`{}`", package_json.name).cyan().to_string()
                 )
-                .bold()
-            )
+                .bold(),
+                t!("how-to-run-script").black()
+            );
+
+            for (name, content) in scripts {
+                println!(
+                    "\n{} {}\n  {}",
+                    "-".bold(),
+                    name.bold(),
+                    content.black().bold()
+                );
+            }
         }
         _ => scripts_field_not_found(),
     }
