@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use eyre::Result;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
+use tokio::process::Command;
 
 mod list;
 mod util;
@@ -13,9 +12,9 @@ use crate::consts::SCRIPT_SIGNAL_EXIT_CODE;
 use crate::package_json::PackageJson;
 use crate::util::user_error;
 
-pub fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<()> {
+pub async fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<()> {
     let args = args.unwrap_or_default();
-    let package_json = PackageJson::from_package_json_file()?;
+    let package_json = PackageJson::from_package_json_file().await?;
 
     match script_name {
         Some(script_name) => {
@@ -27,15 +26,15 @@ pub fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<
 
                         // Run prescript...
                         if let Some(script_content) = scripts.get(&pre_script_name) {
-                            run_script(&pre_script_name, script_content, &[])?;
+                            run_script(&pre_script_name, script_content, &[]).await?;
                         }
 
                         // ...then the script itself...
-                        run_script(&script_name, script_content, &args)?;
+                        run_script(&script_name, script_content, &args).await?;
 
                         // ...and finally the postscript
                         if let Some(script_content) = scripts.get(&post_script_name) {
-                            run_script(&post_script_name, script_content, &[])?;
+                            run_script(&post_script_name, script_content, &[]).await?;
                         }
                     }
                     _ => user_error(
@@ -48,13 +47,13 @@ pub fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<
                 _ => scripts_field_not_found(),
             }
         }
-        _ => list::scripts()?,
+        _ => list::scripts().await?,
     }
 
     Ok(())
 }
 
-fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
+async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
     let content = format!("{content} {}", args.join(" "));
 
     println!("{} script `{name}`", "Running".green().bold());
@@ -73,7 +72,7 @@ fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
         })
         .arg(content);
 
-    let status = command.status()?;
+    let status = command.status().await?;
 
     match status.code() {
         Some(code) if !status.success() => {
@@ -82,7 +81,7 @@ fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
         }
         None => {
             println!();
-            user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE)
+            user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
         }
         _ => {}
     }

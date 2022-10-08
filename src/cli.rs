@@ -10,7 +10,8 @@ pub struct Cli {
 /// Doc comment
 #[derive(Subcommand)]
 pub enum Command {
-    /// Run a script in `package.json`
+    /// Run a script in `package.json`.
+    #[clap(aliases = &["run-script", "rum", "urn"])]
     Run {
         script: Option<String>,
         args: Option<Vec<String>>,
@@ -19,4 +20,8 @@ pub enum Command {
     /// Show the `package.json` path for this package.
     #[clap(aliases = &["package-json", "package-path"])]
     PackageJsonPath,
+
+    /// Create a new `package.json` file.
+    #[clap(aliases = &["create", "innit"])]
+    Init,
 }

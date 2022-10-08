@@ -1,10 +1,10 @@
-use std::hint::unreachable_unchecked;
 use std::path::{Path, PathBuf};
 use std::{env, process};
 
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
+use node_semver::Version;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
 
@@ -60,7 +60,7 @@ pub fn find_package_json() -> Result<PathBuf> {
             f
         } else {
             user_error(t!("package-json-not-found"), exitcode::NOINPUT);
-            unsafe { unreachable_unchecked() }
+            unreachable!()
         },
     )
 }
@@ -69,4 +69,15 @@ pub fn find_package_json() -> Result<PathBuf> {
 pub fn user_error(error: String, exit_code: ExitCode) {
     eprintln!("{} {}", "error:".red().bold(), error.bold());
     process::exit(exit_code);
+}
+
+/// Validate a SemVer version.
+#[allow(clippy::ptr_arg)]
+pub fn validate_version(value: &String) -> Result<(), &'static str> {
+    let version: Result<Version, _> = value.parse();
+
+    match version {
+        Ok(_) => Ok(()),
+        _ => Err("Invalid SemVer version"),
+    }
 }

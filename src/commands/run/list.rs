@@ -1,5 +1,3 @@
-use std::process;
-
 use eyre::Result;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
@@ -7,8 +5,8 @@ use rust_i18n::t;
 use crate::commands::run::util::scripts_field_not_found;
 use crate::package_json::PackageJson;
 
-pub fn scripts() -> Result<()> {
-    let package_json = PackageJson::from_package_json_file()?;
+pub async fn scripts() -> Result<()> {
+    let package_json = PackageJson::from_package_json_file().await?;
     let scripts = package_json.scripts;
 
     match scripts {
@@ -20,27 +18,26 @@ pub fn scripts() -> Result<()> {
                         .red()
                         .bold()
                 );
-                process::exit(0)
-            }
-
-            println!(
-                "{}\n{}",
-                t!(
-                    "scripts-in-package",
-                    count = &format!("{} scripts", &scripts.len()).purple().to_string(),
-                    package_name = &format!("`{}`", package_json.name).cyan().to_string()
-                )
-                .bold(),
-                t!("how-to-run-script").black()
-            );
-
-            for (name, content) in scripts {
+            } else {
                 println!(
-                    "\n{} {}\n  {}",
-                    "-".bold(),
-                    name.bold(),
-                    content.black().bold()
+                    "{}\n{}",
+                    t!(
+                        "scripts-in-package",
+                        count = &format!("{} script(s)", &scripts.len()).purple().to_string(),
+                        package_name = &format!("`{}`", package_json.name).cyan().to_string()
+                    )
+                    .bold(),
+                    t!("how-to-run-script").black()
                 );
+
+                for (name, content) in scripts {
+                    println!(
+                        "\n{} {}\n  {}",
+                        "-".bold(),
+                        name.bold(),
+                        content.black().bold()
+                    );
+                }
             }
         }
         _ => scripts_field_not_found(),
