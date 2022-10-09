@@ -9,10 +9,10 @@ use rust_i18n::t;
 use tokio::fs::File;
 use tokio::io::AsyncWriteExt;
 
+use crate::consts::NO_TEST_SPECIFIED;
 use crate::fnv_map;
 use crate::package_json::{PackageJson, Repository};
 use crate::util::{get_current_dir_name, input, validate_version};
-use crate::consts::NO_TEST_SPECIFIED;
 
 mod default;
 
@@ -24,23 +24,23 @@ pub async fn invoke(yes: bool) -> Result<()> {
     }
 
     // Ask the questions
-    let name = input("Package name", Some(get_current_dir_name()?))?;
+    let name = input(&t!("package-name-prompt"), Some(get_current_dir_name()?))?;
     let version: Version = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Package version")
+        .with_prompt(&t!("package-version-prompt"))
         .default("1.0.0".to_string())
         .validate_with(validate_version)
         .interact_text()?
         .parse()?;
-    let description = input("Package description", None)?;
-    let entry_point = input("Entry point", Some("index.js".into()))?;
+    let description = input(&t!("package-description-prompt"), None)?;
+    let entry_point = input(&t!("package-entry-point-prompt"), Some("index.js".into()))?;
     let test_command = input("Test command", Some(NO_TEST_SPECIFIED.into()))?;
 
-    let mut git_repository = input("Git repository", None)?;
+    let mut git_repository = input(&t!("package-git-repository-prompt"), None)?;
     if !git_repository.ends_with(".git") {
         git_repository.push_str(".git");
     }
 
-    let author = input("Author", None)?;
+    let author = input(&t!("package-author-prompt"), None)?;
 
     let package_json = PackageJson {
         name,
@@ -49,7 +49,7 @@ pub async fn invoke(yes: bool) -> Result<()> {
         license: "MIT".into(),
         description,
         main: entry_point,
-        scripts: Some(fnv_map!{
+        scripts: Some(fnv_map! {
             "test".into() => test_command
         }),
         repository: if git_repository.is_empty() {
@@ -57,9 +57,9 @@ pub async fn invoke(yes: bool) -> Result<()> {
         } else {
             Some(Repository {
                 r#type: "git".into(),
-                url: format!("git+{git_repository}")
+                url: format!("git+{git_repository}"),
             })
-        }
+        },
     };
 
     write_package_json(package_json).await?;
@@ -74,7 +74,8 @@ async fn write_package_json(package_json: PackageJson) -> Result<PathBuf> {
     let package_json_path = current_dir.join("package.json");
 
     let mut file = File::create(&package_json_path).await?;
-    file.write_all(to_string_pretty(&package_json)?.as_bytes()).await?;
+    file.write_all(to_string_pretty(&package_json)?.as_bytes())
+        .await?;
 
     println!(
         "{} `{}`",

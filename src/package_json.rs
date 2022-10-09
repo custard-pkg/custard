@@ -2,7 +2,7 @@ use eyre::Result;
 use fnv::FnvHashMap;
 use node_semver::Version;
 use rust_i18n::t;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use tokio::fs::read_to_string;
 
 use crate::util::{find_package_json, user_error};
@@ -16,13 +16,13 @@ pub struct PackageJson {
     pub description: String,
     pub main: String,
     pub scripts: Option<FnvHashMap<String, String>>,
-    pub repository: Option<Repository>
+    pub repository: Option<Repository>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Repository {
     pub r#type: String,
-    pub url: String
+    pub url: String,
 }
 
 impl PackageJson {

@@ -25,6 +25,6 @@ pub enum Command {
     #[clap(aliases = &["create", "innit"])]
     Init {
         #[arg(short, long)]
-        yes: bool
+        yes: bool,
     },
 }

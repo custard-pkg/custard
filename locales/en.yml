@@ -14,4 +14,10 @@ en:
   how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
 
   # init
+  package-name-prompt: "Package name"
+  package-version-prompt: "Package version"
+  package-description-prompt: "Package description"
+  package-entry-point-prompt: "Entry point"
+  package-git-repository-prompt: "Git repository"
+  package-author-prompt: "Author"
   successfully-wrote-package-json-to: "Successfully wrote `package.json` to"

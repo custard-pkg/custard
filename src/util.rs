@@ -1,14 +1,13 @@
 use std::path::{Path, PathBuf};
 use std::{env, process};
 
+use dialoguer::{theme::ColorfulTheme, Input};
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
 use node_semver::Version;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
-
-use dialoguer::{theme::ColorfulTheme, Input};
 
 use crate::consts::MAX_RECURSION_DEPTH;
 
@@ -118,18 +117,18 @@ macro_rules! fnv_map {
     (@count $($tail:expr),*) => (
       <[()]>::len(&[$(fnv_map!(@to_unit $tail)),*])
     );
-  
+
     {$($k: expr => $v: expr),* $(,)?} => {
       {
         let mut map = fnv::FnvHashMap::with_capacity_and_hasher(
             fnv_map!(@count $($k),*),
           Default::default()
         );
-  
+
         $(
           map.insert($k, $v);
         )*
-  
+
         map
       }
     };
