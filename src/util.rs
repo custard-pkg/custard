@@ -8,16 +8,16 @@ use node_semver::Version;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
 
+use dialoguer::{theme::ColorfulTheme, Input};
+
 use crate::consts::MAX_RECURSION_DEPTH;
 
 /// Find the closest file/directory with the name you want, to
 /// the `_current_dir` Path.
 ///
-/// ```rs
-/// fn main() {
-///     let cargo_manifest = find_closest_file_or_dir(path, "Cargo.toml");
-///     println!("{:?}", cargo_manifest.unwrap());
-/// }
+/// ```rust
+/// let cargo_manifest = find_closest_file_or_dir(path, "Cargo.toml");
+/// println!("{:?}", cargo_manifest.unwrap());
 /// ```
 ///
 /// This function can fail if the recursion depth is reached.
@@ -71,7 +71,7 @@ pub fn user_error(error: String, exit_code: ExitCode) {
     process::exit(exit_code);
 }
 
-/// Validate a SemVer version.
+/// Validate a `SemVer` version.
 #[allow(clippy::ptr_arg)]
 pub fn validate_version(value: &String) -> Result<(), &'static str> {
     let version: Result<Version, _> = value.parse();
@@ -81,3 +81,56 @@ pub fn validate_version(value: &String) -> Result<(), &'static str> {
         _ => Err("Invalid SemVer version"),
     }
 }
+
+/// Uses `dialoguer` to ask for an input.
+/// ```rust
+/// let name = input("What is your name?", None).unwrap();
+/// println!("Hello, {name}!");
+/// ```
+pub fn input(prompt: &str, default: Option<String>) -> Result<String> {
+    let theme = ColorfulTheme::default();
+    let mut input = Input::with_theme(&theme);
+    input.with_prompt(prompt);
+    input.default(default.unwrap_or_default());
+
+    Ok(input.interact_text()?)
+}
+
+/// Gets the current working directory's name.
+/// ```rust
+/// let dir_name = get_current_dir_name().unwrap();
+/// println!("Directory name: {dir_name}");
+/// ```
+pub fn get_current_dir_name() -> Result<String> {
+    Ok(env::current_dir()?
+        .file_name()
+        // guaranteed to not fail, `current_dir` always returns a PathBuf
+        // with components
+        .unwrap()
+        .to_string_lossy()
+        .to_string())
+}
+
+/// Create an FNV `HashMap`, based on the Fowler-Noll-Vo hasher.
+#[macro_export]
+macro_rules! fnv_map {
+    (@to_unit $($_:tt)*) => (());
+    (@count $($tail:expr),*) => (
+      <[()]>::len(&[$(fnv_map!(@to_unit $tail)),*])
+    );
+  
+    {$($k: expr => $v: expr),* $(,)?} => {
+      {
+        let mut map = fnv::FnvHashMap::with_capacity_and_hasher(
+            fnv_map!(@count $($k),*),
+          Default::default()
+        );
+  
+        $(
+          map.insert($k, $v);
+        )*
+  
+        map
+      }
+    };
+  }

@@ -11,5 +11,9 @@
 - We need a better name for the 1st argument of the `find_closest_file_or_dir` function than `_current_dir`
 - `user_error` requires an `unreachable!` macro to be used if something is meant to be returned
 
-## **src/run/mod.rs**
+## **src/commands/run/mod.rs**
 - Add `package.json` variables: https://docs.npmjs.com/cli/v8/using-npm/scripts#packagejson-vars
+
+## **src/commands/init/mod.rs**
+- `npm` guesses a ton of stuff for the `package.json`, we need to do that too
+- `npm` is additive, `custard` isn't

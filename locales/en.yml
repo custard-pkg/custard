@@ -12,3 +12,6 @@ en:
   scripts-in-package: "%{count} in package %{package_name}"
   no-scripts-added: "no scripts in package `%{package_name}`"
   how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
+
+  # init
+  successfully-wrote-package-json-to: "Successfully wrote `package.json` to"

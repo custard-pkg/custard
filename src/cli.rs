@@ -23,5 +23,8 @@ pub enum Command {
 
     /// Create a new `package.json` file.
     #[clap(aliases = &["create", "innit"])]
-    Init,
+    Init {
+        #[arg(short, long)]
+        yes: bool
+    },
 }
