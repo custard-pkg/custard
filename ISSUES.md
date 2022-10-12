@@ -16,4 +16,5 @@
 
 ## **src/commands/init/mod.rs**
 - `npm` guesses a ton of stuff for the `package.json`, we need to do that too
+- use `git config --get remote.origin.url` to get the current Git repository URL
 - `npm` is additive, `custard` isn't

@@ -1,4 +1,7 @@
 en:
+  # general
+  aborted-operation: "Aborted!"
+
   # general package.json stuff
   package-json-not-found: "a `package.json` file was not found in this package."
   package-json-found-at: "a `package.json` file was found at:"
@@ -21,3 +24,4 @@ en:
   package-git-repository-prompt: "Git repository"
   package-author-prompt: "Author"
   successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
+  write-package-json: "Should I write the `package.json` to your working directory?"

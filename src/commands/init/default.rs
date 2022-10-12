@@ -1,4 +1,5 @@
 use eyre::Result;
+use slug::slugify;
 
 use crate::consts::NO_TEST_SPECIFIED;
 use crate::fnv_map;
@@ -7,7 +8,7 @@ use crate::util::get_current_dir_name;
 
 pub fn invoke() -> Result<PackageJson> {
     let package_json = PackageJson {
-        name: get_current_dir_name()?,
+        name: slugify(get_current_dir_name()?),
         version: "1.0.0".parse().unwrap(),
         author: String::new(),
         license: "MIT".into(),

@@ -70,17 +70,6 @@ pub fn user_error(error: String, exit_code: ExitCode) {
     process::exit(exit_code);
 }
 
-/// Validate a `SemVer` version.
-#[allow(clippy::ptr_arg)]
-pub fn validate_version(value: &String) -> Result<(), &'static str> {
-    let version: Result<Version, _> = value.parse();
-
-    match version {
-        Ok(_) => Ok(()),
-        _ => Err("Invalid SemVer version"),
-    }
-}
-
 /// Uses `dialoguer` to ask for an input.
 /// ```rust
 /// let name = input("What is your name?", None).unwrap();
