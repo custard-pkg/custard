@@ -8,7 +8,6 @@
 - ~~Should we be using functions to return some `String`s, and have consts for others?~~ We now use `rust-i18n`, making this irrelevant.
 
 ## **src/util.rs**
-- We need a better name for the 1st argument of the `find_closest_file_or_dir` function than `_current_dir`
 - `user_error` requires an `unreachable!` macro to be used if something is meant to be returned
 
 ## **src/commands/run/mod.rs**
@@ -16,5 +15,5 @@
 
 ## **src/commands/init/mod.rs**
 - `npm` guesses a ton of stuff for the `package.json`, we need to do that too
-- use `git config --get remote.origin.url` to get the current Git repository URL
+  - use `git config --get remote.origin.url` to get the current Git repository URL
 - `npm` is additive, `custard` isn't

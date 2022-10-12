@@ -21,8 +21,8 @@ use crate::consts::MAX_RECURSION_DEPTH;
 /// This function can fail if the recursion depth is reached.
 ///
 /// Based on `https://github.com/egoist/dum/blob/main/src/run.rs`
-pub fn find_closest_file_or_dir(_current_dir: &Path, name: &str) -> Option<PathBuf> {
-    let mut current_dir = Path::new(_current_dir);
+pub fn find_closest_file_or_dir(starting_dir: &Path, name: &str) -> Option<PathBuf> {
+    let mut current_dir = Path::new(starting_dir);
     let mut closest_file = None;
     let mut current_depth = 0;
 
