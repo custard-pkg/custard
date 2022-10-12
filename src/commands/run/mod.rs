@@ -1,3 +1,5 @@
+use std::env;
+
 use eyre::Result;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
@@ -6,7 +8,7 @@ use tokio::process::Command;
 mod list;
 mod util;
 
-use util::scripts_field_not_found;
+use util::{get_node_modules_bin_dir, scripts_field_not_found};
 
 use crate::consts::{LIFECYCLE_SCRIPTS, SCRIPT_SIGNAL_EXIT_CODE};
 use crate::package_json::PackageJson;
@@ -66,6 +68,7 @@ pub async fn invoke(
 }
 
 async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
+    let bin_dir = get_node_modules_bin_dir().await?;
     let content = format!("{content} {}", args.join(" "));
 
     println!("{} script `{name}`", "Running".green().bold());
@@ -83,6 +86,14 @@ async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
             "-c"
         })
         .arg(content);
+    if let Some(bin_dir) = bin_dir {
+        if let Ok(system_path) = env::var("PATH") {
+            command = command.env(
+                "PATH",
+                format!("{}:{system_path}", bin_dir.to_string_lossy()),
+            )
+        }
+    }
 
     let status = command.status().await?;
 

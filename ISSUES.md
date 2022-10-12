@@ -11,7 +11,6 @@
 - `user_error` requires an `unreachable!` macro to be used if something is meant to be returned
 
 ## **src/commands/run/mod.rs**
-- Add `node_modules/.bin` to the PATH
 - Add `package.json` variables: https://docs.npmjs.com/cli/v8/using-npm/scripts#packagejson-vars
 
 ## **src/commands/init/mod.rs**
