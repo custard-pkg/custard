@@ -8,6 +8,7 @@ en:
   failed-to-read-package-json: "failed to read `package.json`: %{error}"
 
   # run command
+  run-with-lifecycle-script-command: "you can run this script with `custard %{name}`."
   scripts-field-not-found: "the `scripts` field was not found in your `package.json` file."
   script-not-found: "script `%{name}` was not found."
   script-not-ok: "script exited with exit code %{code}."

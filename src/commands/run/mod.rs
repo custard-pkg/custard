@@ -8,16 +8,28 @@ mod util;
 
 use util::scripts_field_not_found;
 
-use crate::consts::SCRIPT_SIGNAL_EXIT_CODE;
+use crate::consts::{LIFECYCLE_SCRIPTS, SCRIPT_SIGNAL_EXIT_CODE};
 use crate::package_json::PackageJson;
 use crate::util::user_error;
 
-pub async fn invoke(script_name: Option<String>, args: Option<Vec<String>>) -> Result<()> {
+pub async fn invoke(
+    script_name: Option<String>,
+    args: Option<Vec<String>>,
+    run_with_lifecycle_cmd: bool,
+) -> Result<()> {
     let args = args.unwrap_or_default();
     let package_json = PackageJson::from_package_json_file().await?;
 
     match script_name {
         Some(script_name) => {
+            if !run_with_lifecycle_cmd && LIFECYCLE_SCRIPTS.contains(&script_name.as_str()) {
+                eprintln!(
+                    "{} {}",
+                    "tip:".yellow().bold(),
+                    &t!("run-with-lifecycle-script-command", name = &script_name)
+                );
+            }
+
             match package_json.scripts {
                 Some(scripts) => match scripts.get(&script_name) {
                     Some(script_content) => {

@@ -17,6 +17,12 @@ pub enum Command {
         args: Option<Vec<String>>,
     },
 
+    /// Test a package.
+    Test {
+        script: Option<String>,
+        args: Option<Vec<String>>,
+    },
+
     /// Show the `package.json` path for this package.
     #[clap(aliases = &["package-json", "package-path"])]
     PackageJsonPath,

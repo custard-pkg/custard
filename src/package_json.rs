@@ -51,9 +51,10 @@ pub fn validate_package_name(name: &String) -> Result<(), &'static str> {
         static ref RE: Regex = Regex::new(PACKAGE_NAME_VALIDATION_REGEX).unwrap();
     }
 
-    match RE.is_match(name) {
-        true => Ok(()),
-        false => Err("The package name is invalid!"),
+    if RE.is_match(name) {
+        Ok(())
+    } else {
+        Err("The package name is invalid!")
     }
 }
 

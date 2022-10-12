@@ -5,7 +5,6 @@ use dialoguer::{theme::ColorfulTheme, Input};
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
-use node_semver::Version;
 use owo_colors::OwoColorize;
 use rust_i18n::t;
 

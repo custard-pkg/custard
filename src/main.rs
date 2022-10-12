@@ -24,9 +24,14 @@ async fn main() -> Result<()> {
 
     match cli.command {
         PackageJsonPath => package_json_path::invoke()?,
-        Run { script, args } => run::invoke(script, args).await?,
+        Run { script, args } => run::invoke(script, args, false).await?,
+        Test { args, .. } => lifecycle("test", args).await?,
         Init { yes } => init::invoke(yes).await?,
     }
 
     Ok(())
+}
+
+async fn lifecycle(name: &str, args: Option<Vec<String>>) -> Result<()> {
+    run::invoke(Some(name.into()), args, true).await
 }

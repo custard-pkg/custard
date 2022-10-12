@@ -95,7 +95,7 @@ async fn write_package_json(package_json: PackageJson, ask_for_confirmation: boo
                 package_json_path.to_string_lossy()
             );
         } else {
-            eprintln!("{}", &t!("aborted-operation").red())
+            eprintln!("{}", &t!("aborted-operation").red());
         }
     }
 
