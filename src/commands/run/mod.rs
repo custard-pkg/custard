@@ -54,6 +54,8 @@ pub async fn invoke(
                     exitcode::CONFIG,
                 )
             }
+        } else {
+            scripts_field_not_found();
         }
     } else {
         list::scripts().await?;
