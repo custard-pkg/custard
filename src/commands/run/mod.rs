@@ -22,46 +22,41 @@ pub async fn invoke(
     let args = args.unwrap_or_default();
     let package_json = PackageJson::from_package_json_file().await?;
 
-    match script_name {
-        Some(script_name) => {
-            if !run_with_lifecycle_cmd && LIFECYCLE_SCRIPTS.contains(&script_name.as_str()) {
-                eprintln!(
-                    "{} {}",
-                    "tip:".yellow().bold(),
-                    &t!("run-with-lifecycle-script-command", name = &script_name)
-                );
-            }
+    if let Some(script_name) = script_name {
+        if !run_with_lifecycle_cmd && LIFECYCLE_SCRIPTS.contains(&script_name.as_str()) {
+            eprintln!(
+                "{} {}",
+                "tip:".yellow().bold(),
+                &t!("run-with-lifecycle-script-command", name = &script_name)
+            );
+        }
 
-            match package_json.scripts {
-                Some(scripts) => match scripts.get(&script_name) {
-                    Some(script_content) => {
-                        let pre_script_name = format!("pre{script_name}");
-                        let post_script_name = format!("post{script_name}");
+        if let Some(scripts) = package_json.scripts {
+            if let Some(script_content) = scripts.get(&script_name) {
+                let pre_script_name = format!("pre{script_name}");
+                let post_script_name = format!("post{script_name}");
 
-                        // Run prescript...
-                        if let Some(script_content) = scripts.get(&pre_script_name) {
-                            run_script(&pre_script_name, script_content, &[]).await?;
-                        }
+                // Run prescript...
+                if let Some(script_content) = scripts.get(&pre_script_name) {
+                    run_script(&pre_script_name, script_content, &[]).await?;
+                }
 
-                        // ...then the script itself...
-                        run_script(&script_name, script_content, &args).await?;
+                // ...then the script itself...
+                run_script(&script_name, script_content, &args).await?;
 
-                        // ...and finally the postscript
-                        if let Some(script_content) = scripts.get(&post_script_name) {
-                            run_script(&post_script_name, script_content, &[]).await?;
-                        }
-                    }
-                    _ => user_error(
-                        t!("script-not-found", name = &script_name),
-                        exitcode::CONFIG,
-                    ),
-                },
-
-                // The `scripts` field was not found
-                _ => scripts_field_not_found(),
+                // ...and finally the postscript
+                if let Some(script_content) = scripts.get(&post_script_name) {
+                    run_script(&post_script_name, script_content, &[]).await?;
+                }
+            } else {
+                user_error(
+                    t!("script-not-found", name = &script_name),
+                    exitcode::CONFIG,
+                )
             }
         }
-        _ => list::scripts().await?,
+    } else {
+        list::scripts().await?;
     }
 
     Ok(())
