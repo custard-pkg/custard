@@ -2,8 +2,18 @@
 Custard is a npm replacement.
 
 ## Compiling & Development
-Custard requires the 
-- **latest version of stable/nightly Rust** for compiling.
-- **latest version of nightly Rust** for developing and formatting, at least till `group_imports = "StdExternalCrate"` is available on stable.
+Hello, and thanks for your interest in Custard!
 
-Just `git clone` the repository and start developing!
+Custard requires the  **latest version of nightly Rust** for developing and formatting, at least until `group_imports = "StdExternalCrate"` is available on stable.
+
+Just run:
+
+```sh
+$ git clone https://github.com/custard-pkg/custard.git
+$ cd custard
+```
+
+and start developing!
+
+## License
+Custard is licensed under the **AGPL v3.**
