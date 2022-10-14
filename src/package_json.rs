@@ -30,7 +30,7 @@ pub struct Repository {
 }
 
 impl PackageJson {
-    pub async fn from_package_json_file() -> Result<PackageJson> {
+    pub async fn from_package_json_file() -> Result<Self> {
         let s = read_to_string(find_package_json()?).await?;
 
         match serde_json::from_str(&s) {

@@ -52,7 +52,7 @@ pub async fn invoke(
                 user_error(
                     t!("script-not-found", name = &script_name),
                     exitcode::CONFIG,
-                )
+                );
             }
         } else {
             scripts_field_not_found();
@@ -65,7 +65,7 @@ pub async fn invoke(
 }
 
 async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
-    let bin_dir = get_node_modules_bin_dir().await?;
+    let bin_dir = get_node_modules_bin_dir()?;
     let content = format!("{content} {}", args.join(" "));
 
     println!("{} script `{name}`", "Running".green().bold());
@@ -88,7 +88,7 @@ async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
             command = command.env(
                 "PATH",
                 format!("{}:{system_path}", bin_dir.to_string_lossy()),
-            )
+            );
         }
     }
 
