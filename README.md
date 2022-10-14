@@ -15,5 +15,7 @@ $ cd custard
 
 and start developing!
 
+I'd particularly appreciate any help on the things on [ISSUES.md.](https://github.com/custard-pkg/custard/blob/main/ISSUES.md)
+
 ## License
-Custard is licensed under the **AGPL v3.**
+Custard is licensed under the **GPL v3.**
