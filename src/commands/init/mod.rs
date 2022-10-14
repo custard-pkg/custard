@@ -11,7 +11,9 @@ use tokio::io::AsyncWriteExt;
 
 use crate::consts::NO_TEST_SPECIFIED;
 use crate::fnv_map;
-use crate::package_json::{validate_package_name, validate_version, PackageJson, Repository};
+use crate::package_json::{
+    validate_package_name, validate_spdx, validate_version, PackageJson, Repository,
+};
 use crate::util::{get_current_dir_name, input};
 
 mod default;
@@ -47,12 +49,18 @@ pub async fn invoke(yes: bool) -> Result<()> {
     }
 
     let author = input(&t!("package-author-prompt"), None)?;
+    let license = Input::with_theme(&ColorfulTheme::default())
+        .with_prompt(&t!("package-license-prompt"))
+        .default("MIT".to_string())
+        .validate_with(validate_spdx)
+        .interact_text()?
+        .parse()?;
 
     let package_json = PackageJson {
         name,
         version,
         author,
-        license: "MIT".into(),
+        license,
         description,
         main: entry_point,
         scripts: Some(fnv_map! {

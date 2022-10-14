@@ -24,5 +24,6 @@ en:
   package-entry-point-prompt: "Entry point"
   package-git-repository-prompt: "Git repository"
   package-author-prompt: "Author"
+  package-license-prompt: "License"
   successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
   write-package-json: "Should I write the `package.json` to your working directory?"

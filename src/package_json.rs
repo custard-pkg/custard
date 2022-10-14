@@ -5,6 +5,7 @@ use node_semver::Version;
 use regex::Regex;
 use rust_i18n::t;
 use serde::{Deserialize, Serialize};
+use spdx::Expression;
 use tokio::fs::read_to_string;
 
 use crate::consts::PACKAGE_NAME_VALIDATION_REGEX;
@@ -51,10 +52,10 @@ pub fn validate_package_name(name: &String) -> Result<(), &'static str> {
         static ref RE: Regex = Regex::new(PACKAGE_NAME_VALIDATION_REGEX).unwrap();
     }
 
-    if RE.is_match(name) {
+    if RE.is_match(&name.to_lowercase()) {
         Ok(())
     } else {
-        Err("The package name is invalid!")
+        Err("the package name is invalid")
     }
 }
 
@@ -65,6 +66,15 @@ pub fn validate_version(value: &String) -> Result<(), &'static str> {
 
     match version {
         Ok(_) => Ok(()),
-        _ => Err("Invalid SemVer version"),
+        Err(_) => Err("Invalid SemVer version"),
+    }
+}
+
+/// Validate an SPDX identifier.
+#[allow(clippy::ptr_arg)]
+pub fn validate_spdx(value: &String) -> Result<(), &'static str> {
+    match Expression::parse(value) {
+        Ok(_) => Ok(()),
+        Err(_) => Err("Invalid license identifier"),
     }
 }
