@@ -28,6 +28,8 @@ pub async fn invoke(
                 "{} {}",
                 "tip:".yellow().bold(),
                 &t!("run-with-lifecycle-script-command", name = &script_name)
+                    .black()
+                    .bold()
             );
         }
 
