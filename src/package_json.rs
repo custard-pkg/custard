@@ -10,6 +10,7 @@ use tokio::fs::read_to_string;
 
 use crate::consts::PACKAGE_NAME_VALIDATION_REGEX;
 use crate::util::{find_package_json, user_error};
+
 #[derive(Serialize, Deserialize)]
 pub struct PackageJson {
     pub name: String,
