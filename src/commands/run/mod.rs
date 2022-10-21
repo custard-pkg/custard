@@ -2,6 +2,7 @@ use std::env;
 
 use eyre::Result;
 use owo_colors::OwoColorize;
+use relm4_macros::view;
 use rust_i18n::t;
 use tokio::process::Command;
 
@@ -73,26 +74,19 @@ async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
     println!("{} script `{name}`", "Running".green().bold());
     println!("\n{}", format!("> {content}").bold());
 
-    let mut command = &mut if cfg!(target_os = "windows") {
-        Command::new("cmd")
-    } else {
-        Command::new("sh")
-    };
-    command = command
-        .arg(if cfg!(target_os = "windows") {
-            "/C"
-        } else {
-            "-c"
-        })
-        .arg(content);
-    if let Some(bin_dir) = bin_dir {
-        if let Ok(system_path) = env::var("PATH") {
-            command = command.env(
+    let shell = if cfg!(windows) { "cmd.exe" } else { "/bin/sh" };
+    let quiet_flag = if cfg!(windows) { "/C" } else { "-c" };
+
+    let system_path = env::var("PATH")?;
+    view! {
+        mut command = Command::new(shell) {
+            args: [quiet_flag, &content],
+            env: args!(
                 "PATH",
-                format!("{}:{system_path}", bin_dir.to_string_lossy()),
-            );
+                format!("{}:{system_path}", bin_dir.to_string_lossy())
+            )
         }
-    }
+    };
 
     let status = command.status().await?;
 

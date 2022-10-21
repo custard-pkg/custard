@@ -3,3 +3,4 @@
 # used for testing
 package.json
 node_modules
+bun.lockb
