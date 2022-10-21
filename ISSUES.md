@@ -11,6 +11,7 @@
 - `user_error` requires an `unreachable!` macro to be used if something is meant to be returned
 
 ## **src/commands/run/mod.rs**
+- `npm run` sets the `NODE` environment variable to the node executable with which npm is executed. Custard doesn't.
 - Add `package.json` variables: https://docs.npmjs.com/cli/v8/using-npm/scripts#packagejson-vars
 
 ## **src/commands/init/mod.rs**
