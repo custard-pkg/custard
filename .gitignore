@@ -3,4 +3,7 @@
 # used for testing
 package.json
 node_modules
+
+# *gasps* "Blasphemy, this is!" they say.
+# But custard is incomplete, and I'n only using bun for testing.
 bun.lockb
