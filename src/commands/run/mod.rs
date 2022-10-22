@@ -1,7 +1,7 @@
 use std::env;
 
 use eyre::Result;
-use owo_colors::OwoColorize;
+use colored::Colorize;
 use relm4_macros::view;
 use rust_i18n::t;
 use serde_value::Value;
@@ -93,12 +93,10 @@ async fn run_script(
     npm_version => "1.2.3"
     */
     let flat_btree = serde_value_flatten::to_flatten_maptree("_", Some("npm_"), package_json)?;
-    let flattened_package_json: Vec<(String, String)> = flat_btree
+    let _flattened_package_json: Vec<(String, String)> = flat_btree
         .iter()
         .map(|(k, v)| (value_to_string(k), value_to_string(v)))
         .collect();
-
-    dbg!(flattened_package_json);
 
     view! {
         mut command = Command::new(shell) {

@@ -10,8 +10,8 @@ pub fn invoke() -> Result<PackageJson> {
     let package_json = PackageJson {
         name: slugify(get_current_dir_name()?),
         version: "1.0.0".parse().unwrap(),
-        author: String::new(),
-        license: "MIT".into(),
+        author: Some(String::new()),
+        license: Some("MIT".into()),
         description: Some(String::new()),
         main: "index.js".into(),
         scripts: Some(fnv_map! {

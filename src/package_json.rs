@@ -15,8 +15,10 @@ use crate::util::{find_package_json, user_error};
 pub struct PackageJson {
     pub name: String,
     pub version: Version,
-    pub author: String,
-    pub license: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]

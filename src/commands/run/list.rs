@@ -1,5 +1,5 @@
 use eyre::Result;
-use owo_colors::OwoColorize;
+use colored::Colorize;
 use rust_i18n::t;
 
 use crate::commands::run::util::scripts_field_not_found;

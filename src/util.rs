@@ -5,7 +5,7 @@ use dialoguer::{theme::ColorfulTheme, Input};
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
-use owo_colors::OwoColorize;
+use colored::Colorize;
 use rust_i18n::t;
 
 use crate::consts::MAX_RECURSION_DEPTH;

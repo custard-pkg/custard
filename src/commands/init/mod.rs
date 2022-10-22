@@ -3,7 +3,7 @@ use std::env;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use eyre::Result;
 use node_semver::Version;
-use owo_colors::OwoColorize;
+use colored::Colorize;
 use rust_i18n::t;
 use slug::slugify;
 use tokio::fs::File;
@@ -48,13 +48,15 @@ pub async fn invoke(yes: bool) -> Result<()> {
         git_repository.push_str(".git");
     }
 
-    let author = input(&t!("package-author-prompt"), None)?;
-    let license = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt(&t!("package-license-prompt"))
-        .default("MIT".to_string())
-        .validate_with(validate_spdx)
-        .interact_text()?
-        .parse()?;
+    let author = Some(input(&t!("package-author-prompt"), None)?);
+    let license = Some(
+        Input::with_theme(&ColorfulTheme::default())
+            .with_prompt(&t!("package-license-prompt"))
+            .default("MIT".to_string())
+            .validate_with(validate_spdx)
+            .interact_text()?
+            .parse()?,
+    );
 
     let package_json = PackageJson {
         name,
