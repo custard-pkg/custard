@@ -23,6 +23,9 @@ regex = "1.6.0"
 relm4-macros = "0.4.4"
 rust-i18n = "0.6.1"
 serde = { version = "1.0.145", features = ["derive"] }
+# serde-value-flatten uses 0.6
+serde-value = "0.6.0"
+serde-value-flatten = "0.1.0"
 serde_json = "1.0.85"
 slug = "0.1.4"
 spdx = "0.9.0"

@@ -17,11 +17,42 @@ pub struct PackageJson {
     pub version: Version,
     pub author: String,
     pub license: String,
-    pub description: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub homepage: Option<String>,
     pub main: String,
     pub scripts: Option<FnvHashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub keywords: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub os: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cpu: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bin: Option<FnvHashMap<String, String>>,
+}
+
+impl Default for PackageJson {
+    fn default() -> Self {
+        Self {
+            name: String::new(),
+            version: "1.0.0".parse().unwrap(),
+            author: Default::default(),
+            license: Default::default(),
+            description: Default::default(),
+            homepage: Default::default(),
+            main: Default::default(),
+            scripts: Default::default(),
+            repository: Default::default(),
+            keywords: Default::default(),
+            os: Default::default(),
+            cpu: Default::default(),
+            bin: Default::default(),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]

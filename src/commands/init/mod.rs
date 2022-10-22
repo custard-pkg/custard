@@ -39,7 +39,7 @@ pub async fn invoke(yes: bool) -> Result<()> {
         .validate_with(validate_version)
         .interact_text()?
         .parse()?;
-    let description = input(&t!("package-description-prompt"), None)?;
+    let description = Some(input(&t!("package-description-prompt"), None)?);
     let entry_point = input(&t!("package-entry-point-prompt"), Some("index.js".into()))?;
     let test_command = input("Test command", Some(NO_TEST_SPECIFIED.into()))?;
 
@@ -74,6 +74,7 @@ pub async fn invoke(yes: bool) -> Result<()> {
                 url: format!("git+{git_repository}"),
             })
         },
+        ..Default::default()
     };
 
     write_package_json(package_json, true).await?;

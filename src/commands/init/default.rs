@@ -12,12 +12,13 @@ pub fn invoke() -> Result<PackageJson> {
         version: "1.0.0".parse().unwrap(),
         author: String::new(),
         license: "MIT".into(),
-        description: String::new(),
+        description: Some(String::new()),
         main: "index.js".into(),
         scripts: Some(fnv_map! {
             "test".into() => NO_TEST_SPECIFIED.into()
         }),
         repository: None,
+        ..Default::default()
     };
 
     Ok(package_json)

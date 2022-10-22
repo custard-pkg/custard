@@ -4,6 +4,7 @@ use eyre::Result;
 use owo_colors::OwoColorize;
 use relm4_macros::view;
 use rust_i18n::t;
+use serde_value::Value;
 use tokio::process::Command;
 
 mod list;
@@ -34,22 +35,22 @@ pub async fn invoke(
             );
         }
 
-        if let Some(scripts) = package_json.scripts {
+        if let Some(ref scripts) = package_json.scripts {
             if let Some(script_content) = scripts.get(&script_name) {
                 let pre_script_name = format!("pre{script_name}");
                 let post_script_name = format!("post{script_name}");
 
                 // Run prescript...
                 if let Some(script_content) = scripts.get(&pre_script_name) {
-                    run_script(&pre_script_name, script_content, &[]).await?;
+                    run_script(&pre_script_name, script_content, &[], &package_json).await?;
                 }
 
                 // ...then the script itself...
-                run_script(&script_name, script_content, &args).await?;
+                run_script(&script_name, script_content, &args, &package_json).await?;
 
                 // ...and finally the postscript
                 if let Some(script_content) = scripts.get(&post_script_name) {
-                    run_script(&post_script_name, script_content, &[]).await?;
+                    run_script(&post_script_name, script_content, &[], &package_json).await?;
                 }
             } else {
                 user_error(
@@ -67,24 +68,46 @@ pub async fn invoke(
     Ok(())
 }
 
-async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
+async fn run_script(
+    name: &str,
+    content: &str,
+    args: &[String],
+    package_json: &PackageJson,
+) -> Result<()> {
     let bin_dir = get_node_modules_bin_dir()?;
     let content = format!("{content} {}", args.join(" "));
 
     println!("{} script `{name}`", "Running".green().bold());
     println!("\n{}", format!("> {content}").bold());
 
+    // Get the system specific shell, and the flag to make it quiet
     let shell = if cfg!(windows) { "cmd.exe" } else { "/bin/sh" };
     let quiet_flag = if cfg!(windows) { "/C" } else { "-c" };
 
+    // Get the "real" PATH environment variable.
     let system_path = env::var("PATH")?;
+
+    /*
+    This looks like this:
+    npm_name => "name",
+    npm_version => "1.2.3"
+    */
+    let flat_btree = serde_value_flatten::to_flatten_maptree("_", Some("npm_"), package_json)?;
+    let flattened_package_json: Vec<(String, String)> = flat_btree
+        .iter()
+        .map(|(k, v)| (value_to_string(k), value_to_string(v)))
+        .collect();
+
+    dbg!(flattened_package_json);
+
     view! {
         mut command = Command::new(shell) {
             args: [quiet_flag, &content],
             env: args!(
                 "PATH",
                 format!("{}:{system_path}", bin_dir.to_string_lossy())
-            )
+            ),
+            //envs: args!(flattened_package_json)
         }
     };
 
@@ -103,4 +126,12 @@ async fn run_script(name: &str, content: &str, args: &[String]) -> Result<()> {
     }
 
     Ok(())
+}
+
+fn value_to_string(value: &Value) -> String {
+    if let Value::String(s) = value {
+        s.clone()
+    } else {
+        serde_json::to_string(value).unwrap()
+    }
 }
