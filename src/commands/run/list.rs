@@ -23,8 +23,8 @@ pub async fn scripts() -> Result<()> {
                     "{}\n{}",
                     t!(
                         "scripts-in-package",
-                        count = &format!("{} script(s)", &scripts.len()).purple().to_string(),
-                        package_name = &format!("`{}`", package_json.name).cyan().to_string()
+                        count = &format!("{} script(s)", &scripts.len()).purple(),
+                        package_name = &format!("`{}`", package_json.name).cyan()
                     )
                     .bold(),
                     t!("how-to-run-script").black()
