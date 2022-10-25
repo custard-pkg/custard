@@ -1,9 +1,9 @@
-use eyre::Result;
 use colored::Colorize;
+use eyre::Result;
+use package_json::PackageJson;
 use rust_i18n::t;
 
 use crate::commands::run::util::scripts_field_not_found;
-use crate::package_json::PackageJson;
 
 pub async fn scripts() -> Result<()> {
     let package_json = PackageJson::from_package_json_file().await?;

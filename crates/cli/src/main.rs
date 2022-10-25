@@ -7,13 +7,11 @@ use eyre::Result;
 mod cli;
 mod commands;
 mod consts;
-mod package_json;
-mod util;
 
 use cli::{Cli, Command::*};
 use commands::*;
 
-rust_i18n::i18n!("locales");
+rust_i18n::i18n!("../../locales");
 
 #[tokio::main]
 async fn main() -> Result<()> {

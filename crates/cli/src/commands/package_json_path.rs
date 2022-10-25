@@ -1,9 +1,7 @@
-use eyre::Result;
 use colored::Colorize;
+use custard_util::{find_package_json, MAX_RECURSION_DEPTH};
+use eyre::Result;
 use rust_i18n::t;
-
-use crate::consts::MAX_RECURSION_DEPTH;
-use crate::util::find_package_json;
 
 pub fn invoke() -> Result<()> {
     let path = find_package_json()?;

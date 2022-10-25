@@ -1,15 +1,18 @@
+use custard_util::{find_package_json, user_error};
 use eyre::Result;
 use fnv::FnvHashMap;
-use lazy_static::lazy_static;
 use node_semver::Version;
-use regex::Regex;
 use rust_i18n::t;
 use serde::{Deserialize, Serialize};
 use spdx::Expression;
 use tokio::fs::read_to_string;
 
-use crate::consts::PACKAGE_NAME_VALIDATION_REGEX;
-use crate::util::{find_package_json, user_error};
+pub use validate_package_name::validate as validate_package_name;
+
+rust_i18n::i18n!("../../locales");
+
+pub const PACKAGE_NAME_VALIDATION_REGEX: &str =
+    "^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$";
 
 #[derive(Serialize, Deserialize)]
 pub struct PackageJson {
@@ -77,19 +80,6 @@ impl PackageJson {
                 unreachable!()
             }
         }
-    }
-}
-
-#[allow(clippy::ptr_arg)]
-pub fn validate_package_name(name: &String) -> Result<(), &'static str> {
-    lazy_static! {
-        static ref RE: Regex = Regex::new(PACKAGE_NAME_VALIDATION_REGEX).unwrap();
-    }
-
-    if RE.is_match(&name.to_lowercase()) {
-        Ok(())
-    } else {
-        Err("the package name is invalid")
     }
 }
 

@@ -1,10 +1,9 @@
+use custard_util::{fnv_map, get_current_dir_name};
 use eyre::Result;
+use package_json::PackageJson;
 use slug::slugify;
 
 use crate::consts::NO_TEST_SPECIFIED;
-use crate::fnv_map;
-use crate::package_json::PackageJson;
-use crate::util::get_current_dir_name;
 
 pub fn invoke() -> Result<PackageJson> {
     let package_json = PackageJson {

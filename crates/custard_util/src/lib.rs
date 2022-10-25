@@ -1,20 +1,26 @@
 use std::path::{Path, PathBuf};
 use std::{env, process};
 
+use colored::Colorize;
 use dialoguer::{theme::ColorfulTheme, Input};
 use exitcode::ExitCode;
 use eyre::Result;
 use eyre::WrapErr;
-use colored::Colorize;
 use rust_i18n::t;
 
-use crate::consts::MAX_RECURSION_DEPTH;
+rust_i18n::i18n!("../../locales");
+
+/// The maximum depth that functions will recurse.
+pub const MAX_RECURSION_DEPTH: usize = 8;
 
 /// Find the closest file/directory with the name you want, to
 /// the `_current_dir` Path.
 ///
 /// ```rust
-/// let cargo_manifest = find_closest_file_or_dir(path, "Cargo.toml");
+/// use std::path::Path;
+/// use custard_util::find_closest_file_or_dir;
+///
+/// let cargo_manifest = find_closest_file_or_dir(Path::new(env!("CARGO_MANIFEST_DIR")), "Cargo.toml");
 /// println!("{:?}", cargo_manifest.unwrap());
 /// ```
 ///
@@ -71,6 +77,8 @@ pub fn user_error(error: String, exit_code: ExitCode) {
 
 /// Uses `dialoguer` to ask for an input.
 /// ```rust
+/// use custard_util::input;
+///
 /// let name = input("What is your name?", None).unwrap();
 /// println!("Hello, {name}!");
 /// ```
@@ -85,6 +93,8 @@ pub fn input(prompt: &str, default: Option<String>) -> Result<String> {
 
 /// Gets the current working directory's name.
 /// ```rust
+/// use custard_util::get_current_dir_name;
+///
 /// let dir_name = get_current_dir_name().unwrap();
 /// println!("Directory name: {dir_name}");
 /// ```
@@ -120,4 +130,4 @@ macro_rules! fnv_map {
         map
       }
     };
-  }
+}

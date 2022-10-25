@@ -264,6 +264,7 @@ dependencies = [
  "clap 4.0.18",
  "color-eyre",
  "colored",
+ "custard_util",
  "dialoguer",
  "exitcode",
  "eyre",
@@ -271,6 +272,7 @@ dependencies = [
  "lazy_static",
  "node-semver",
  "once_cell",
+ "package_json",
  "predicates",
  "regex",
  "relm4-macros",
@@ -282,6 +284,18 @@ dependencies = [
  "slug",
  "spdx",
  "tokio",
+]
+
+[[package]]
+name = "custard_util"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "dialoguer",
+ "exitcode",
+ "eyre",
+ "once_cell",
+ "rust-i18n",
 ]
 
 [[package]]
@@ -646,6 +660,26 @@ name = "owo-colors"
 version = "3.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c1b04fb49957986fdce4d6ee7a65027d55d4b6d2265e5848bbb507b58ccfdb6f"
+
+[[package]]
+name = "package_json"
+version = "0.1.0"
+dependencies = [
+ "custard_util",
+ "exitcode",
+ "eyre",
+ "fnv",
+ "lazy_static",
+ "node-semver",
+ "once_cell",
+ "regex",
+ "rust-i18n",
+ "serde",
+ "serde_json",
+ "spdx",
+ "tokio",
+ "validate_package_name",
+]
 
 [[package]]
 name = "pin-project-lite"
@@ -1163,6 +1197,21 @@ name = "unicode-width"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
+
+[[package]]
+name = "urlencoding"
+version = "2.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8db7427f936968176eaa7cdf81b7f98b980b18495ec28f1b5791ac3bfe3eea9"
+
+[[package]]
+name = "validate_package_name"
+version = "0.1.0"
+dependencies = [
+ "lazy_static",
+ "regex",
+ "urlencoding",
+]
 
 [[package]]
 name = "valuable"
