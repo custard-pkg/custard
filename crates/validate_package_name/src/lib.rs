@@ -51,8 +51,7 @@ pub fn validate(name: &String) -> Result<(), &'static str> {
             //
             // - the full name ("@custard/hey")
             // - the user ("custard"),
-            // - the package ("hi") 
-            dbg!(&matches);
+            // - the package ("hi")
 
             if matches.len() != 3 || matches.get(1).is_none() || matches.get(2).is_none() {
                 return Err("scoped package name is invalid");
