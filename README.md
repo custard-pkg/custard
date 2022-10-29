@@ -21,4 +21,4 @@ I'd particularly appreciate any help on the things on [ISSUES.md.](https://githu
 
 ## License
 
-Custard is licensed under the **GPL v3.**
+Custard is licensed under the **Apache 2.**

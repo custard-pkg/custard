@@ -1,7 +1,11 @@
 [package]
 name = "validate_package_name"
+description = "Validate an npm package name."
 version = "0.1.0"
 edition = "2021"
+keywords = ["npm", "validate npm", "npm package name"]
+categories = ["npm", "node.js", "validation"]
+license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
