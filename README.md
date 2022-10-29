@@ -6,7 +6,7 @@ Custard is a npm replacement.
 
 Hello, and thanks for your interest in Custard!
 
-Custard requires the  **a fairly recent version of nightly Rust** for developing and formatting, at least until `group_imports = "StdExternalCrate"` is available on stable.
+Custard requires a **fairly recent version of nightly Rust** for developing and formatting, at least until `group_imports = "StdExternalCrate"` is available on stable.
 
 Just run:
 
