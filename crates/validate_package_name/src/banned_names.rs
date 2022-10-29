@@ -1,3 +1,4 @@
+/// All the names **not** allowed.
 const BANNED_NAMES: [&str; 47] = [
     "node_modules",
     "favicon.ico",
