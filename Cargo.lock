@@ -1473,7 +1473,7 @@ checksum = "e8db7427f936968176eaa7cdf81b7f98b980b18495ec28f1b5791ac3bfe3eea9"
 
 [[package]]
 name = "validate_package_name"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "lazy_static",
  "regex",
