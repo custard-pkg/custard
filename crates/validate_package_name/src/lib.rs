@@ -18,7 +18,7 @@ const MAX_LEN: usize = 214;
 ///
 /// assert!(validate(&String::from("hello")).is_ok())
 /// ```
-/// 
+///
 /// # Errors
 /// This function can fail if the package name is invalid.
 pub fn validate(name: &String) -> Result<(), &'static str> {
@@ -84,7 +84,7 @@ mod tests {
 
     fn assert_err(name: &str) {
         let is_valid = validate(&String::from(name));
-        
+
         if is_valid.is_ok() {
             panic!("test failed: package name `{name}` passes when it shouldn't")
         }
@@ -92,7 +92,7 @@ mod tests {
 
     fn assert_ok(name: &str) {
         let is_valid = validate(&String::from(name));
-        
+
         if let Err(e) = is_valid {
             panic!("test failed: package name `{name}` fails with error: {e}")
         }
