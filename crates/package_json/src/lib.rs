@@ -4,9 +4,9 @@ use fnv::FnvHashMap;
 use node_semver::Version;
 use rust_i18n::t;
 use serde::{Deserialize, Serialize};
+use serde_with::skip_serializing_none;
 use spdx::Expression;
 use tokio::fs::read_to_string;
-
 pub use validate_package_name::validate as validate_package_name;
 
 rust_i18n::i18n!("../../locales");
@@ -14,29 +14,21 @@ rust_i18n::i18n!("../../locales");
 pub const PACKAGE_NAME_VALIDATION_REGEX: &str =
     "^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$";
 
+#[skip_serializing_none]
 #[derive(Serialize, Deserialize)]
 pub struct PackageJson {
     pub name: String,
     pub version: Version,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub license: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub homepage: Option<String>,
-    pub main: String,
+    pub main: Option<String>,
     pub scripts: Option<FnvHashMap<String, String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub keywords: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub bin: Option<FnvHashMap<String, String>>,
 }
 
@@ -68,7 +60,7 @@ pub struct Repository {
 
 impl PackageJson {
     /// Create a `PackageJson` struct from the package's `package.json` file.
-    /// 
+    ///
     /// # Errors
     /// This function can fail if:
     /// - there is no `package.json` in the package
@@ -90,7 +82,7 @@ impl PackageJson {
 }
 
 /// Validate a `SemVer` version.
-/// 
+///
 /// # Errors
 /// This function can error if the version is invalid.
 #[allow(clippy::ptr_arg)]
@@ -104,7 +96,7 @@ pub fn validate_version(value: &String) -> Result<(), &'static str> {
 }
 
 /// Validate an SPDX identifier.
-/// 
+///
 /// # Errors
 /// This function can fail if the license is invalid.
 #[allow(clippy::ptr_arg)]

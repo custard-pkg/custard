@@ -12,7 +12,7 @@ pub fn invoke() -> Result<PackageJson> {
         author: Some(String::new()),
         license: Some("MIT".into()),
         description: Some(String::new()),
-        main: "index.js".into(),
+        main: Some("index.js".into()),
         scripts: Some(fnv_map! {
             "test".into() => NO_TEST_SPECIFIED.into()
         }),

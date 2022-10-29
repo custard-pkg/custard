@@ -63,7 +63,7 @@ pub async fn invoke(yes: bool) -> Result<()> {
         author,
         license,
         description,
-        main: entry_point,
+        main: Some(entry_point),
         scripts: Some(fnv_map! {
             "test".into() => test_command
         }),
