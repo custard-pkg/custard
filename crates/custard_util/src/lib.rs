@@ -27,6 +27,7 @@ pub const MAX_RECURSION_DEPTH: usize = 8;
 /// This function can fail if the recursion depth is reached.
 ///
 /// Based on `https://github.com/egoist/dum/blob/main/src/run.rs`
+#[must_use = "you need to use the PathBuf! that's why it's there!"]
 pub fn find_closest_file_or_dir(starting_dir: &Path, name: &str) -> Option<PathBuf> {
     let mut current_dir = Path::new(starting_dir);
     let mut closest_file = None;

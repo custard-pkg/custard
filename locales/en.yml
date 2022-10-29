@@ -26,4 +26,4 @@ en:
   package-author-prompt: "Author"
   package-license-prompt: "License"
   successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
-  write-package-json: "Should I write the `package.json` to your working directory?"
+  write-package-json: "Should I write the `package.json` file to your working directory?"

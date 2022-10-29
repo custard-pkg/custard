@@ -51,6 +51,7 @@ const BANNED_NAMES: [&str; 47] = [
     "diagnostics_channel",
 ];
 
+#[allow(clippy::ptr_arg)]
 pub fn is_banned(name: &String) -> bool {
     BANNED_NAMES.contains(&name.to_lowercase().as_str())
 }

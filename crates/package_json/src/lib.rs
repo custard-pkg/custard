@@ -67,6 +67,12 @@ pub struct Repository {
 }
 
 impl PackageJson {
+    /// Create a `PackageJson` struct from the package's `package.json` file.
+    /// 
+    /// # Errors
+    /// This function can fail if:
+    /// - there is no `package.json` in the package
+    /// - the `package.json` file is invalid
     pub async fn from_package_json_file() -> Result<Self> {
         let s = read_to_string(find_package_json()?).await?;
 
@@ -84,6 +90,9 @@ impl PackageJson {
 }
 
 /// Validate a `SemVer` version.
+/// 
+/// # Errors
+/// This function can error if the version is invalid.
 #[allow(clippy::ptr_arg)]
 pub fn validate_version(value: &String) -> Result<(), &'static str> {
     let version: Result<Version, _> = value.parse();
@@ -95,6 +104,9 @@ pub fn validate_version(value: &String) -> Result<(), &'static str> {
 }
 
 /// Validate an SPDX identifier.
+/// 
+/// # Errors
+/// This function can fail if the license is invalid.
 #[allow(clippy::ptr_arg)]
 pub fn validate_spdx(value: &String) -> Result<(), &'static str> {
     match Expression::parse(value) {

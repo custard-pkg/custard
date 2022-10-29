@@ -18,6 +18,9 @@ const MAX_LEN: usize = 214;
 ///
 /// assert!(validate(&String::from("hello")).is_ok())
 /// ```
+/// 
+/// # Errors
+/// This function can fail if the package name is invalid.
 pub fn validate(name: &String) -> Result<(), &'static str> {
     if name.is_empty() {
         return Err("package name must not be empty");
