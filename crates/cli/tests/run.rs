@@ -2,17 +2,25 @@ use std::process::Command;
 
 use assert_cmd::prelude::*;
 use assert_fs::prelude::*;
+use assert_fs::TempDir;
 use eyre::Result;
 use predicates::prelude::*;
+use rust_i18n::t;
 
-const EXAMPLE_PACKAGE_JSON: &str = include_str!("text/package-json.hello.json");
+const TEST_PACKAGE_JSON: &str = include_str!("text/run.json");
 
-#[test]
-fn runs_scripts_in_foreground() -> Result<()> {
+fn dir_with_package_json() -> Result<TempDir> {
     let temp = assert_fs::TempDir::new().unwrap();
     let input_file = temp.child("package.json");
     input_file.touch()?;
-    input_file.write_str(EXAMPLE_PACKAGE_JSON)?;
+    input_file.write_str(TEST_PACKAGE_JSON)?;
+
+    Ok(temp)
+}
+
+#[test]
+fn runs_scripts_in_foreground() -> Result<()> {
+    let temp = dir_with_package_json()?;
 
     let mut cmd = &mut Command::cargo_bin("custard")?;
     cmd = cmd.current_dir(temp.path());
@@ -24,3 +32,21 @@ fn runs_scripts_in_foreground() -> Result<()> {
 
     Ok(())
 }
+
+#[test]
+fn prompt_command_on_lifecycle_with_run() -> Result<()> {
+    let temp = dir_with_package_json()?;
+
+    let mut cmd = &mut Command::cargo_bin("custard")?;
+    cmd = cmd.current_dir(temp.path());
+
+    cmd.arg("run").arg("test");
+    cmd.assert().success().stderr(predicate::str::contains(t!(
+        "run-with-lifecycle-script-command",
+        name = "test"
+    )));
+
+    Ok(())
+}
+
+rust_i18n::i18n!("../../locales");

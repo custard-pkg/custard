@@ -1,0 +1,10 @@
+{
+    "name": "example",
+    "version": "1.0.0",
+    "main": "nah.js",
+
+    "scripts": {
+        "hello": "echo \"one two three\"",
+        "test": "echo \"69 tests SUCCESS, 0 tests FAILED, 0 tests IGNORED\""
+    }
+}
