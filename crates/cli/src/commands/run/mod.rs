@@ -142,7 +142,10 @@ async fn run_script(
                 }
                 None => {
                     println!();
-                    user_error(t!("run.script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
+                    user_error(
+                        t!("run.script-terminated-by-signal"),
+                        SCRIPT_SIGNAL_EXIT_CODE,
+                    );
                 }
                 _ => {}
             }

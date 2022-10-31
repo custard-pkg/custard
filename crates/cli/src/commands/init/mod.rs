@@ -39,7 +39,10 @@ pub async fn invoke(yes: bool) -> Result<()> {
         .interact_text()?
         .parse()?;
     let description = Some(input(&t!("init.package.description-prompt"), None)?);
-    let entry_point = input(&t!("init.package.entry-point-prompt"), Some("index.js".into()))?;
+    let entry_point = input(
+        &t!("init.package.entry-point-prompt"),
+        Some("index.js".into()),
+    )?;
     let test_command = input("Test command", Some(NO_TEST_SPECIFIED.into()))?;
 
     let mut git_repository = input(&t!("init.package.git-repository-prompt"), None)?;
