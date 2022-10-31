@@ -19,6 +19,7 @@ use crate::consts::{LIFECYCLE_SCRIPTS, SCRIPT_SIGNAL_EXIT_CODE};
 pub async fn invoke(
     script_name: Option<String>,
     args: Option<Vec<String>>,
+    script_shell: String,
     run_with_lifecycle_cmd: bool,
 ) -> Result<()> {
     let args = args.unwrap_or_default();
@@ -42,15 +43,36 @@ pub async fn invoke(
 
                 // Run prescript...
                 if let Some(script_content) = scripts.get(&pre_script_name) {
-                    run_script(&pre_script_name, script_content, &[], &package_json).await?;
+                    run_script(
+                        &pre_script_name,
+                        script_content,
+                        &[],
+                        &package_json,
+                        &script_shell,
+                    )
+                    .await?;
                 }
 
                 // ...then the script itself...
-                run_script(&script_name, script_content, &args, &package_json).await?;
+                run_script(
+                    &script_name,
+                    script_content,
+                    &args,
+                    &package_json,
+                    &script_shell,
+                )
+                .await?;
 
                 // ...and finally the postscript
                 if let Some(script_content) = scripts.get(&post_script_name) {
-                    run_script(&post_script_name, script_content, &[], &package_json).await?;
+                    run_script(
+                        &post_script_name,
+                        script_content,
+                        &[],
+                        &package_json,
+                        &script_shell,
+                    )
+                    .await?;
                 }
             } else {
                 user_error(
@@ -73,6 +95,7 @@ async fn run_script(
     content: &str,
     args: &[String],
     package_json: &PackageJson,
+    script_shell: &String,
 ) -> Result<()> {
     let bin_dir = get_node_modules_bin_dir()?;
     let content = format!("{content} {}", args.join(" "));
@@ -81,7 +104,6 @@ async fn run_script(
     println!("\n{}", format!("> {content}").bold());
 
     // Get the system specific shell, and the flag to make it quiet
-    let shell = if cfg!(windows) { "cmd.exe" } else { "/bin/sh" };
     let quiet_flag = if cfg!(windows) { "/C" } else { "-c" };
 
     // Get the "real" PATH environment variable.
@@ -99,7 +121,7 @@ async fn run_script(
         .collect();
 
     view! {
-        mut command = Command::new(shell) {
+        mut command = Command::new(script_shell) {
             args: [quiet_flag, &content],
             env: args!(
                 "PATH",
@@ -109,18 +131,26 @@ async fn run_script(
         }
     };
 
-    let status = command.status().await?;
+    match command.status().await {
+        // The shell ran successfully...
+        Ok(status) => {
+            // ... but we don't know
+            match status.code() {
+                Some(code) if !status.success() => {
+                    println!();
+                    user_error(t!("script-not-ok", code = &code.to_string()), code);
+                }
+                None => {
+                    println!();
+                    user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
+                }
+                _ => {}
+            }
+        }
 
-    match status.code() {
-        Some(code) if !status.success() => {
-            println!();
-            user_error(t!("script-not-ok", code = &code.to_string()), code);
-        }
-        None => {
-            println!();
-            user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
-        }
-        _ => {}
+        // The shell failed to execute. Likely this means that the
+        // --script-shell argument was invalid.
+        Err(_) => user_error(t!("failed-to-start-script-shell"), exitcode::OSFILE),
     }
 
     Ok(())

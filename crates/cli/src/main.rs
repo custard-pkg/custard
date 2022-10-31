@@ -22,14 +22,18 @@ async fn main() -> Result<()> {
 
     match cli.command {
         PackageJsonPath => package_json_path::invoke()?,
-        Run { script, args } => run::invoke(script, args, false).await?,
-        Test { args, .. } => lifecycle("test", args).await?,
+        Run {
+            script,
+            args,
+            script_shell,
+        } => run::invoke(script, args, script_shell, false).await?,
+        Test { args, script_shell } => lifecycle("test", script_shell, args).await?,
         Init { yes } => init::invoke(yes).await?,
     }
 
     Ok(())
 }
 
-async fn lifecycle(name: &str, args: Option<Vec<String>>) -> Result<()> {
-    run::invoke(Some(name.into()), args, true).await
+async fn lifecycle(name: &str, script_shell: String, args: Option<Vec<String>>) -> Result<()> {
+    run::invoke(Some(name.into()), args, script_shell, true).await
 }

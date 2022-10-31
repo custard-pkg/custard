@@ -17,15 +17,22 @@ pub enum Command {
 
         /// Any arguments you want to pass to the script
         args: Option<Vec<String>>,
+
+        /// The shell to use when running scripts.
+        /// Defaults to '/bin/sh' on POSIX systems and to 'cmd.exe' on Windows
+        #[arg(long, default_value_t = get_platform_shell())]
+        script_shell: String,
     },
 
     /// Test a package.
     Test {
-        /// The name of the script you want to run
-        script: Option<String>,
-
         /// Any arguments you want to pass to the script
         args: Option<Vec<String>>,
+
+        /// The shell to use when running scripts.
+        /// Defaults to '/bin/sh' on POSIX systems and to 'cmd.exe' on Windows
+        #[arg(long, default_value_t = get_platform_shell())]
+        script_shell: String,
     },
 
     /// Show the `package.json` path for this package.
@@ -39,4 +46,8 @@ pub enum Command {
         /// Skip any prompts and just use the defaults
         yes: bool,
     },
+}
+
+fn get_platform_shell() -> String {
+    if cfg!(windows) { "cmd.exe" } else { "/bin/sh" }.into()
 }
