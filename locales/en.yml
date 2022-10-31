@@ -2,29 +2,32 @@ en:
   # general
   aborted-operation: "Aborted!"
 
-  # general package.json stuff
-  package-json-not-found: "a `package.json` file was not found in this package."
-  package-json-found-at: "a `package.json` file was found at:"
-  failed-to-read-package-json: "failed to read `package.json`: %{error}"
+  package-json:
+    not-found: "a `package.json` file was not found in this package."
+    found-at: "a `package.json` file was found at:"
+    failed-to-read: "failed to read `package.json`: %{error}"
 
-  # run command
-  run-with-lifecycle-script-command: "you can run this script with `custard %{name}`."
-  scripts-field-not-found: "the `scripts` field was not found in your `package.json` file."
-  script-not-found: "script `%{name}` was not found."
-  script-not-ok: "script exited with exit code %{code}."
-  script-terminated-by-signal: "script was terminated by signal (e.g. Ctrl-C or Cmd-C)"
-  failed-to-start-script-shell: "failed to start script shell, please check the `--script-shell` argument and try again."
-  scripts-in-package: "%{count} in package %{package_name}"
-  no-scripts-added: "no scripts in package `%{package_name}`"
-  how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
+  run:
+    run-with-lifecycle-script-command: "you can run this script with `custard %{name}`."
+    scripts-field-not-found: "the `scripts` field was not found in your `package.json` file."
+    script-not-found: "script `%{name}` was not found."
+    script-not-ok: "script exited with exit code %{code}."
+    script-terminated-by-signal: "script was terminated by signal (e.g. Ctrl-C or Cmd-C)"
+    failed-to-start-script-shell: "failed to start script shell, please check the `--script-shell` argument and try again."
+    list:
+      scripts-in-package: "%{count} in package %{package_name}"
+      no-scripts-added: "no scripts in package `%{package_name}`"
+      how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
 
-  # init
-  package-name-prompt: "Package name"
-  package-version-prompt: "Package version"
-  package-description-prompt: "Package description"
-  package-entry-point-prompt: "Entry point"
-  package-git-repository-prompt: "Git repository"
-  package-author-prompt: "Author"
-  package-license-prompt: "License"
-  successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
-  write-package-json: "Should I write the `package.json` file to your working directory?"
+  init:
+    package:
+      name-prompt: "Package name"
+      version-prompt: "Package version"
+      description-prompt: "Package description"
+      entry-point-prompt: "Entry point"
+      git-repository-prompt: "Git repository"
+      author-prompt: "Author"
+      license-prompt: "License"
+    successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
+    write-package-json: "Should I write the `package.json` file to your working directory?"
+

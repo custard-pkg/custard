@@ -72,7 +72,7 @@ impl PackageJson {
             Ok(package_json) => Ok(package_json),
             Err(e) => {
                 user_error(
-                    t!("failed-to-read-package-json", error = &e.to_string()),
+                    t!("package-json.failed-to-read", error = &e.to_string()),
                     exitcode::CONFIG,
                 );
                 unreachable!()

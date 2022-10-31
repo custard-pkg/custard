@@ -30,7 +30,7 @@ pub async fn invoke(
             eprintln!(
                 "{} {}",
                 "tip:".yellow().bold(),
-                &t!("run-with-lifecycle-script-command", name = &script_name)
+                &t!("run.run-with-lifecycle-script-command", name = &script_name)
                     .black()
                     .bold()
             );
@@ -138,11 +138,11 @@ async fn run_script(
             match status.code() {
                 Some(code) if !status.success() => {
                     println!();
-                    user_error(t!("script-not-ok", code = &code.to_string()), code);
+                    user_error(t!("run.script-not-ok", code = &code.to_string()), code);
                 }
                 None => {
                     println!();
-                    user_error(t!("script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
+                    user_error(t!("run.script-terminated-by-signal"), SCRIPT_SIGNAL_EXIT_CODE);
                 }
                 _ => {}
             }
@@ -150,7 +150,7 @@ async fn run_script(
 
         // The shell failed to execute. Likely this means that the
         // --script-shell argument was invalid.
-        Err(_) => user_error(t!("failed-to-start-script-shell"), exitcode::OSFILE),
+        Err(_) => user_error(t!("run.failed-to-start-script-shell"), exitcode::OSFILE),
     }
 
     Ok(())

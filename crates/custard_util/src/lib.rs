@@ -64,7 +64,7 @@ pub fn find_package_json() -> Result<PathBuf> {
         ) {
             f
         } else {
-            user_error(t!("package-json-not-found"), exitcode::NOINPUT);
+            user_error(t!("package-json.not-found"), exitcode::NOINPUT);
             unreachable!()
         },
     )

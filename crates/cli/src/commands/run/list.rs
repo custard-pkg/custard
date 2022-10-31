@@ -14,7 +14,7 @@ pub async fn scripts() -> Result<()> {
             if scripts.is_empty() {
                 println!(
                     "{}",
-                    t!("no-scripts-added", package_name = &package_json.name)
+                    t!("run.list.no-scripts-added", package_name = &package_json.name)
                         .red()
                         .bold()
                 );
@@ -27,7 +27,7 @@ pub async fn scripts() -> Result<()> {
                         package_name = &format!("`{}`", package_json.name).cyan()
                     )
                     .bold(),
-                    t!("how-to-run-script").black()
+                    t!("run.list.how-to-run-script").black()
                 );
 
                 for (name, content) in scripts {

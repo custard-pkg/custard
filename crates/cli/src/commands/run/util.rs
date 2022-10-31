@@ -5,7 +5,7 @@ use eyre::Result;
 use rust_i18n::t;
 
 pub fn scripts_field_not_found() {
-    user_error(t!("scripts-field-not-found"), exitcode::CONFIG);
+    user_error(t!("run.scripts-field-not-found"), exitcode::CONFIG);
 }
 
 pub fn get_node_modules_bin_dir() -> Result<PathBuf> {

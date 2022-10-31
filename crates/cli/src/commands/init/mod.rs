@@ -26,31 +26,31 @@ pub async fn invoke(yes: bool) -> Result<()> {
 
     // Ask the questions
     let name = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt(&t!("package-name-prompt"))
+        .with_prompt(&t!("init.package.name-prompt"))
         .default(slugify(get_current_dir_name()?))
         .validate_with(validate_package_name)
         .interact_text()?
         .parse()?;
 
     let version: Version = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt(&t!("package-version-prompt"))
+        .with_prompt(&t!("init.package.version-prompt"))
         .default("1.0.0".to_string())
         .validate_with(validate_version)
         .interact_text()?
         .parse()?;
-    let description = Some(input(&t!("package-description-prompt"), None)?);
-    let entry_point = input(&t!("package-entry-point-prompt"), Some("index.js".into()))?;
+    let description = Some(input(&t!("init.package.description-prompt"), None)?);
+    let entry_point = input(&t!("init.package.entry-point-prompt"), Some("index.js".into()))?;
     let test_command = input("Test command", Some(NO_TEST_SPECIFIED.into()))?;
 
-    let mut git_repository = input(&t!("package-git-repository-prompt"), None)?;
+    let mut git_repository = input(&t!("init.package.git-repository-prompt"), None)?;
     if !git_repository.is_empty() && !git_repository.ends_with(".git") {
         git_repository.push_str(".git");
     }
 
-    let author = Some(input(&t!("package-author-prompt"), None)?);
+    let author = Some(input(&t!("init.package.author-prompt"), None)?);
     let license = Some(
         Input::with_theme(&ColorfulTheme::default())
-            .with_prompt(&t!("package-license-prompt"))
+            .with_prompt(&t!("init.package.license-prompt"))
             .default("MIT".to_string())
             .validate_with(validate_spdx)
             .interact_text()?
@@ -88,7 +88,7 @@ async fn write_package_json(package_json: PackageJson, ask_for_confirmation: boo
 
     if ask_for_confirmation {
         if Confirm::with_theme(&ColorfulTheme::default())
-            .with_prompt(&t!("write-package-json"))
+            .with_prompt(&t!("init.write-package-json"))
             .interact()?
         {
             let current_dir = env::current_dir()?;
@@ -101,7 +101,7 @@ async fn write_package_json(package_json: PackageJson, ask_for_confirmation: boo
 
             println!(
                 "{} `{}`",
-                t!("successfully-wrote-package-json-to").green().bold(),
+                t!("init.successfully-wrote-package-json-to").green().bold(),
                 package_json_path.to_string_lossy()
             );
         } else {

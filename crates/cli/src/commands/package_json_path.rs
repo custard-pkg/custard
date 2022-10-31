@@ -8,7 +8,7 @@ pub fn invoke() -> Result<()> {
 
     println!(
         "{}\n{}\n{})",
-        t!("package-json-found-at").green().bold(),
+        t!("package-json.found-at").green().bold(),
         path.to_string_lossy(),
         format!("(max depth: {MAX_RECURSION_DEPTH}").black()
     );

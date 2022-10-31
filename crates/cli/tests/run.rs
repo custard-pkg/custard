@@ -42,7 +42,7 @@ fn prompt_command_on_lifecycle_with_run() -> Result<()> {
 
     cmd.arg("run").arg("test");
     cmd.assert().success().stderr(predicate::str::contains(t!(
-        "run-with-lifecycle-script-command",
+        "run.run-with-lifecycle-script-command",
         name = "test"
     )));
 
