@@ -4,11 +4,11 @@ use colored::Colorize;
 use eyre::Result;
 use relm4_macros::view;
 use rust_i18n::t;
-use serde_value::Value;
 use tokio::process::Command;
 
 mod list;
 mod util;
+//mod json_vars;
 
 use custard_util::user_error;
 use package_json::PackageJson;
@@ -47,7 +47,6 @@ pub async fn invoke(
                         &pre_script_name,
                         script_content,
                         &[],
-                        &package_json,
                         &script_shell,
                     )
                     .await?;
@@ -58,7 +57,6 @@ pub async fn invoke(
                     &script_name,
                     script_content,
                     &args,
-                    &package_json,
                     &script_shell,
                 )
                 .await?;
@@ -69,7 +67,6 @@ pub async fn invoke(
                         &post_script_name,
                         script_content,
                         &[],
-                        &package_json,
                         &script_shell,
                     )
                     .await?;
@@ -94,7 +91,6 @@ async fn run_script(
     name: &str,
     content: &str,
     args: &[String],
-    package_json: &PackageJson,
     script_shell: &String,
 ) -> Result<()> {
     let bin_dir = get_node_modules_bin_dir()?;
@@ -108,17 +104,6 @@ async fn run_script(
 
     // Get the "real" PATH environment variable.
     let system_path = env::var("PATH")?;
-
-    /*
-    This looks like this:
-    npm_name => "name",
-    npm_version => "1.2.3"
-    */
-    let flat_btree = serde_value_flatten::to_flatten_maptree("_", Some("npm_"), package_json)?;
-    let _flattened_package_json: Vec<(String, String)> = flat_btree
-        .iter()
-        .map(|(k, v)| (value_to_string(k), value_to_string(v)))
-        .collect();
 
     view! {
         mut command = Command::new(script_shell) {
@@ -157,12 +142,4 @@ async fn run_script(
     }
 
     Ok(())
-}
-
-fn value_to_string(value: &Value) -> String {
-    if let Value::String(s) = value {
-        s.clone()
-    } else {
-        serde_json::to_string(value).unwrap()
-    }
 }
