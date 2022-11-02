@@ -11,7 +11,7 @@ Custard requires a **fairly recent version of nightly Rust** for developing and 
 Just run:
 
 ```sh
-git clone https://github.com/custard-pkg/custard.git
+git clone https://github.com/custard-pkg/custard.git --recursive
 cd custard
 ```
 
