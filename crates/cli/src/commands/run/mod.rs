@@ -43,33 +43,15 @@ pub async fn invoke(
 
                 // Run prescript...
                 if let Some(script_content) = scripts.get(&pre_script_name) {
-                    run_script(
-                        &pre_script_name,
-                        script_content,
-                        &[],
-                        &script_shell,
-                    )
-                    .await?;
+                    run_script(&pre_script_name, script_content, &[], &script_shell).await?;
                 }
 
                 // ...then the script itself...
-                run_script(
-                    &script_name,
-                    script_content,
-                    &args,
-                    &script_shell,
-                )
-                .await?;
+                run_script(&script_name, script_content, &args, &script_shell).await?;
 
                 // ...and finally the postscript
                 if let Some(script_content) = scripts.get(&post_script_name) {
-                    run_script(
-                        &post_script_name,
-                        script_content,
-                        &[],
-                        &script_shell,
-                    )
-                    .await?;
+                    run_script(&post_script_name, script_content, &[], &script_shell).await?;
                 }
             } else {
                 user_error(
@@ -96,6 +78,7 @@ async fn run_script(
     let bin_dir = get_node_modules_bin_dir()?;
     let content = format!("{content} {}", args.join(" "));
 
+    // Print the script info
     println!("{} script `{name}`", "Running".green().bold());
     println!("\n{}", format!("> {content}").bold());
 
