@@ -328,8 +328,8 @@ dependencies = [
  "relm4-macros",
  "rust-i18n",
  "serde",
- "serde-value 0.6.0",
- "serde-value-flatten 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde-value",
+ "serde-value-flatten",
  "serde_json",
  "slug",
  "spdx",
@@ -853,15 +853,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ordered-float"
-version = "2.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7940cf2ca942593318d07fcf2596cdca60a85c9e7fab408a5e21a4f9dcd40d87"
-dependencies = [
- "num-traits",
-]
-
-[[package]]
 name = "os_str_bytes"
 version = "6.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1135,27 +1126,8 @@ version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a65a7291a8a568adcae4c10a677ebcedbc6c9cec91c054dee2ce40b0e3290eb"
 dependencies = [
- "ordered-float 1.1.1",
+ "ordered-float",
  "serde",
-]
-
-[[package]]
-name = "serde-value"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3a1a3341211875ef120e117ea7fd5228530ae7e7036a779fdc9117be6b3282c"
-dependencies = [
- "ordered-float 2.10.0",
- "serde",
-]
-
-[[package]]
-name = "serde-value-flatten"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde-value 0.7.0",
- "serde_json",
 ]
 
 [[package]]
@@ -1165,7 +1137,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca9f4b921303593e52a901ec78266bb1352645d675a42e062d7704061144f6f0"
 dependencies = [
  "serde",
- "serde-value 0.6.0",
+ "serde-value",
 ]
 
 [[package]]

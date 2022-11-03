@@ -1,3 +1,0 @@
-[submodule "crates/serde_value_flatten"]
-	path = crates/serde_value_flatten
-	url = https://github.com/custard-pkg/rust-serde-value-flatten
