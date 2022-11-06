@@ -1,0 +1,33 @@
+on:
+  schedule:
+    - cron: '0 11 * * *'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  housekeeping:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the branch
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: add Clippy fixes
+        run: |
+          cargo clippy --fix
+
+      - name: format code
+        run: |
+          cargo fmt
+
+      - name: setup git config
+        run: |
+          git config user.name "Custard Housekeeper"
+          git config user.email "<>"
+
+      - name: commit
+        run: |
+          git add -A
+          git commit -m "daily: format code and update deps"
+          git push origin main
