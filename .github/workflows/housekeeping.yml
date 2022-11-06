@@ -36,5 +36,5 @@ jobs:
       - name: commit
         run: |
           git add -A
-          git commit -m "daily: format code and update deps"
+          git commit -m "onpush: format code and update deps"
           git push origin main
