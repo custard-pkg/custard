@@ -1,3 +1,5 @@
+name: "Housekeeping"
+
 on:
   schedule:
     - cron: '0 11 * * *'
