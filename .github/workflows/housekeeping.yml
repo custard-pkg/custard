@@ -35,7 +35,7 @@ jobs:
 
       - name: commit
         run: |
-          git add -A
+          git add .
           if ! git diff-index --quiet HEAD; then \
           git commit -m "onpush: format code and update deps" \
           git push origin main \
