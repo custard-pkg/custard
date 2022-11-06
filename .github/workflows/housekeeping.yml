@@ -18,7 +18,7 @@ jobs:
 
       - name: install Clippy
         run: |
-          rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
+          rustup component add clippy
 
       - name: add Clippy fixes
         run: |
