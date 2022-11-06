@@ -2,7 +2,7 @@ name: "Housekeeping"
 
 on:
   schedule:
-    - cron: '5 11 * * *'
+    - cron: '0 0 * * *'
 
 env:
   CARGO_TERM_COLOR: always
@@ -14,6 +14,10 @@ jobs:
       # Checkout the branch
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: install Clippy
+        run: |
+          rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name: add Clippy fixes
         run: |
