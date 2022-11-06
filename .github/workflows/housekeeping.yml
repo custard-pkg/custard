@@ -2,7 +2,7 @@ name: "Housekeeping"
 
 on:
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '5 11 * * *'
 
 env:
   CARGO_TERM_COLOR: always
