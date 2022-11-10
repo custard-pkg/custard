@@ -101,12 +101,6 @@ async fn write_package_json(package_json: PackageJson, ask_for_confirmation: boo
 
             file.write_all(to_string_pretty(&package_json)?.as_bytes())
                 .await?;
-
-            println!(
-                "{} `{}`",
-                t!("init.successfully-wrote-package-json-to").green().bold(),
-                package_json_path.to_string_lossy()
-            );
         } else {
             eprintln!("{}", &t!("aborted-operation").red());
         }

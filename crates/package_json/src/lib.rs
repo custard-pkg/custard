@@ -1,4 +1,5 @@
 use custard_util::{find_package_json, user_error};
+use derivative::Derivative;
 use eyre::Result;
 use fnv::FnvHashMap;
 use node_semver::Version;
@@ -11,13 +12,12 @@ pub use validate_package_name::validate as validate_package_name;
 
 rust_i18n::i18n!("../../locales");
 
-pub const PACKAGE_NAME_VALIDATION_REGEX: &str =
-    "^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$";
-
 #[skip_serializing_none]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Derivative)]
+#[derivative(Default)]
 pub struct PackageJson {
     pub name: String,
+    #[derivative(Default(value = "default_version()"))]
     pub version: Version,
     pub author: Option<String>,
     pub license: Option<String>,
@@ -32,24 +32,8 @@ pub struct PackageJson {
     pub bin: Option<FnvHashMap<String, String>>,
 }
 
-impl Default for PackageJson {
-    fn default() -> Self {
-        Self {
-            name: String::new(),
-            version: "1.0.0".parse().unwrap(),
-            author: Default::default(),
-            license: Default::default(),
-            description: Default::default(),
-            homepage: Default::default(),
-            main: Default::default(),
-            scripts: Default::default(),
-            repository: Default::default(),
-            keywords: Default::default(),
-            os: Default::default(),
-            cpu: Default::default(),
-            bin: Default::default(),
-        }
-    }
+fn default_version() -> Version {
+    "1.0.0".parse().unwrap()
 }
 
 #[derive(Serialize, Deserialize)]

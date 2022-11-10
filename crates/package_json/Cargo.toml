@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 custard_util = { version = "0.1.0", path = "../custard_util" }
+derivative = "2.2.0"
 exitcode = "1.1.2"
 eyre = "0.6.8"
 fnv = "1.0.7"

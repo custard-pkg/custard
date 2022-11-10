@@ -178,4 +178,9 @@ mod tests {
     fn reject_name_over_max_len() {
         assert_err("ifyouwanttogetthesumoftwonumberswherethosetwonumbersarechosenbyfindingthelargestoftwooutofthreenumbersandsquaringthemwhichismultiplyingthembyitselfthenyoushouldinputthreenumbersintothisfunctionanditwilldothatforyoucool")
     }
+
+    #[test]
+    fn reject_empty() {
+        assert_err("")
+    }
 }
