@@ -26,6 +26,14 @@ pub async fn invoke(yes: bool) -> Result<()> {
         return Ok(());
     }
 
+    println!(
+        "{}",
+        format!(
+            "{}",
+            t!("init.welcome", command = &"`custard init`!".purple())
+        ).bold()
+    );
+
     // Ask the questions
     let name = Input::with_theme(&ColorfulTheme::default())
         .with_prompt(&t!("init.package.name-prompt"))

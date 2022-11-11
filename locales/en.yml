@@ -20,6 +20,9 @@ en:
       how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
 
   init:
+    welcome: "Welcome to %{command}"
+    successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
+    write-package-json: "Should I write the `package.json` file to your working directory?"
     package:
       name-prompt: "Package name"
       version-prompt: "Package version"
@@ -28,6 +31,3 @@ en:
       git-repository-prompt: "Git repository"
       author-prompt: "Author"
       license-prompt: "License"
-    successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
-    write-package-json: "Should I write the `package.json` file to your working directory?"
-
