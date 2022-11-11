@@ -25,7 +25,7 @@ pub async fn scripts() -> Result<()> {
                 println!(
                     "{}\n{}",
                     t!(
-                        "run.scripts-in-package",
+                        "run.list.scripts-in-package",
                         count = &format!("{} script(s)", &scripts.len()).purple(),
                         package_name = &format!("`{}`", package_json.name).cyan()
                     )

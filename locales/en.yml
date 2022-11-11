@@ -20,7 +20,14 @@ en:
       how-to-run-script: "Use `custard run <name>` to run a script, where `<name>` is the name of the script."
 
   init:
-    welcome: "Welcome to %{command}"
+    welcome:
+      short: "Welcome to %{command}"
+      long: |
+        I'll ask you a few questions, and then generate a `package.json` file for you. 
+
+        If you're not using the --yes option, I'll also ask you to confirm writing the
+        file to your current directory.
+
     successfully-wrote-package-json-to: "Successfully wrote `package.json` to"
     write-package-json: "Should I write the `package.json` file to your working directory?"
     package:

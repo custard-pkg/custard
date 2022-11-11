@@ -28,11 +28,11 @@ pub async fn invoke(yes: bool) -> Result<()> {
 
     println!(
         "{}",
-        format!(
-            "{}",
-            t!("init.welcome", command = &"`custard init`!".purple())
-        ).bold()
+        t!("init.welcome.short", command = "`custard init`!")
+            .bold()
+            .purple()
     );
+    println!("{}", t!("init.welcome.long"));
 
     // Ask the questions
     let name = Input::with_theme(&ColorfulTheme::default())
