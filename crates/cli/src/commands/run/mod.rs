@@ -55,7 +55,7 @@ pub async fn invoke(
                 }
             } else {
                 user_error(
-                    t!("script-not-found", name = &script_name),
+                    t!("run.script-not-found", name = &script_name),
                     exitcode::CONFIG,
                 );
             }
