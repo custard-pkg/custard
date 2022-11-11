@@ -1,4 +1,5 @@
 /// All the names **not** allowed.
+#[cfg(not(tarpaulin_include))]
 const BANNED_NAMES: [&str; 47] = [
     "node_modules",
     "favicon.ico",

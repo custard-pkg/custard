@@ -1,3 +1,4 @@
+#[cfg(not(tarpaulin_include))]
 use clap::{Parser, Subcommand};
 
 /// Custard - a fast `npm` alternative.
@@ -48,6 +49,7 @@ pub enum Command {
     },
 }
 
+#[cfg(not(tarpaulin_include))]
 fn get_platform_shell() -> String {
     if cfg!(windows) { "cmd.exe" } else { "/bin/sh" }.into()
 }
