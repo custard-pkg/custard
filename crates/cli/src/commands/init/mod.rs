@@ -1,4 +1,5 @@
 use std::env;
+use std::path::Path;
 
 use colored::Colorize;
 use custard_util::{fnv_map, get_current_dir_name, input};
@@ -9,6 +10,7 @@ use package_json::{
     validate_package_name, validate_spdx, validate_version, PackageJson, Repository,
 };
 use rust_i18n::t;
+use serde_json::to_string_pretty;
 use slug::slugify;
 use tokio::fs::File;
 use tokio::io::AsyncWriteExt;
@@ -20,7 +22,7 @@ mod default;
 pub async fn invoke(yes: bool) -> Result<()> {
     if yes {
         let default = default::invoke()?;
-        write_package_json(default, false).await?;
+        write_package_json_prompt(default, false).await?;
         return Ok(());
     }
 
@@ -81,29 +83,47 @@ pub async fn invoke(yes: bool) -> Result<()> {
         ..Default::default()
     };
 
-    write_package_json(package_json, true).await?;
+    write_package_json_prompt(package_json, true).await?;
 
     Ok(())
 }
 
-async fn write_package_json(package_json: PackageJson, ask_for_confirmation: bool) -> Result<()> {
-    use serde_json::to_string_pretty;
+async fn write(
+    file: &mut File,
+    package_json: &PackageJson,
+    package_json_path: &Path,
+) -> Result<()> {
+    file.write_all(to_string_pretty(&package_json)?.as_bytes())
+        .await?;
+
+    println!(
+        "{} `{}`",
+        t!("init.successfully-wrote-package-json-to").green().bold(),
+        package_json_path.to_string_lossy()
+    );
+
+    Ok(())
+}
+
+async fn write_package_json_prompt(
+    package_json: PackageJson,
+    ask_for_confirmation: bool,
+) -> Result<()> {
+    let current_dir = env::current_dir()?;
+    let package_json_path = current_dir.join("package.json");
+    let mut file = File::create(&package_json_path).await?;
 
     if ask_for_confirmation {
         if Confirm::with_theme(&ColorfulTheme::default())
             .with_prompt(&t!("init.write-package-json"))
             .interact()?
         {
-            let current_dir = env::current_dir()?;
-            let package_json_path = current_dir.join("package.json");
-
-            let mut file = File::create(&package_json_path).await?;
-
-            file.write_all(to_string_pretty(&package_json)?.as_bytes())
-                .await?;
+            write(&mut file, &package_json, &package_json_path).await?;
         } else {
             eprintln!("{}", &t!("aborted-operation").red());
         }
+    } else {
+        write(&mut file, &package_json, &package_json_path).await?;
     }
 
     Ok(())
