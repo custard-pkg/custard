@@ -1,6 +1,7 @@
 use std::env;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
+use bstr::BStr;
 use colored::Colorize;
 use custard_util::{fnv_map, get_current_dir_name, input};
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
@@ -18,6 +19,9 @@ use tokio::io::AsyncWriteExt;
 use crate::consts::NO_TEST_SPECIFIED;
 
 mod default;
+mod git_remote;
+
+use git_remote::find_origin_remote;
 
 pub async fn invoke(yes: bool) -> Result<()> {
     if yes {
@@ -55,7 +59,10 @@ pub async fn invoke(yes: bool) -> Result<()> {
     )?;
     let test_command = input("Test command", Some(NO_TEST_SPECIFIED.into()))?;
 
-    let mut git_repository = input(&t!("init.package.git-repository-prompt"), None)?;
+    let mut git_repository = input(
+        &t!("init.package.git-repository-prompt"),
+        find_origin_remote(&env::current_dir()?)?,
+    )?;
     if !git_repository.is_empty() && !git_repository.ends_with(".git") {
         git_repository.push_str(".git");
     }
@@ -85,7 +92,9 @@ pub async fn invoke(yes: bool) -> Result<()> {
         } else {
             Some(Repository {
                 r#type: "git".into(),
-                url: format!("git+{git_repository}"),
+                url: git_url::parse(BStr::new(&git_repository))?
+                    .to_bstring()
+                    .try_into()?,
             })
         },
         ..Default::default()
@@ -113,25 +122,30 @@ async fn write(
     Ok(())
 }
 
+async fn get_package_json_file() -> Result<(File, PathBuf)> {
+    let current_dir = env::current_dir()?;
+    let path = current_dir.join("package.json");
+    let file = File::create(&path).await?;
+    Ok((file, path))
+}
+
 async fn write_package_json_prompt(
     package_json: PackageJson,
     ask_for_confirmation: bool,
 ) -> Result<()> {
-    let current_dir = env::current_dir()?;
-    let package_json_path = current_dir.join("package.json");
-    let mut file = File::create(&package_json_path).await?;
-
     if ask_for_confirmation {
         if Confirm::with_theme(&ColorfulTheme::default())
             .with_prompt(&t!("init.write-package-json"))
             .interact()?
         {
-            write(&mut file, &package_json, &package_json_path).await?;
+            let (mut file, path) = get_package_json_file().await?;
+            write(&mut file, &package_json, &path).await?;
         } else {
             eprintln!("{}", &t!("aborted-operation").red());
         }
     } else {
-        write(&mut file, &package_json, &package_json_path).await?;
+        let (mut file, path) = get_package_json_file().await?;
+        write(&mut file, &package_json, &path).await?;
     }
 
     Ok(())
