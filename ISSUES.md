@@ -8,7 +8,6 @@
 ## **src/consts.rs**
 
 - Should `SCRIPT_SIGNAL_EXIT_CODE` be 2?
-- ~~Should we be using functions to return some `String`s, and have consts for others?~~ We now use `rust-i18n`, making this irrelevant.
 
 ## **src/util.rs**
 
@@ -22,5 +21,5 @@
 ## **src/commands/init/mod.rs**
 
 - `npm` guesses a ton of stuff for the `package.json`, we need to do that too
-  - use `git config --get remote.origin.url` to get the current Git repository URL
+  - [x] use `git config --get remote.origin.url` to get the current Git repository URL
 - `npm` is additive, `custard` isn't
