@@ -32,6 +32,8 @@ SOFTWARE.
 
 ## serde-value-flatten
 
+We maintain a fork of this dependency for use in the `run` command.
+
 ```text
 BSD 3-Clause License
 
