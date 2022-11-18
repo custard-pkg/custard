@@ -16,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: extractions/setup-just@v1
     - name: Install Clippy
       run: rustup component add clippy
     - name: Build
