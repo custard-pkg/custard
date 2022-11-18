@@ -26,14 +26,45 @@ async fn main() -> Result<()> {
             script,
             args,
             script_shell,
-        } => run::invoke(script, args, script_shell, false).await?,
-        Test { args, script_shell } => lifecycle("test", script_shell, args).await?,
+            if_present,
+            ignore_scripts,
+        } => {
+            run::invoke(
+                script,
+                args,
+                script_shell,
+                if_present,
+                ignore_scripts,
+                false,
+            )
+            .await?
+        }
+        Test {
+            args,
+            script_shell,
+            if_present,
+            ignore_scripts,
+        } => lifecycle("test", script_shell, args, if_present, ignore_scripts).await?,
         Init { yes } => init::invoke(yes).await?,
     }
 
     Ok(())
 }
 
-async fn lifecycle(name: &str, script_shell: String, args: Option<Vec<String>>) -> Result<()> {
-    run::invoke(Some(name.into()), args, script_shell, true).await
+async fn lifecycle(
+    name: &str,
+    script_shell: String,
+    args: Option<Vec<String>>,
+    if_present: bool,
+    ignore_scripts: bool,
+) -> Result<()> {
+    run::invoke(
+        Some(name.into()),
+        args,
+        script_shell,
+        true,
+        if_present,
+        ignore_scripts,
+    )
+    .await
 }

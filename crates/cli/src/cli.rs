@@ -32,7 +32,7 @@ pub enum Command {
 
         /// If set, `custard` won't run any pre or post scripts.
         #[arg(long, default_value_t = false)]
-        ignore_scripts: bool
+        ignore_scripts: bool,
     },
 
     /// Test a package.
@@ -44,6 +44,16 @@ pub enum Command {
         /// Defaults to '/bin/sh' on POSIX systems and to 'cmd.exe' on Windows
         #[arg(long, default_value_t = get_platform_shell())]
         script_shell: String,
+
+        /// If true, `custard` will not exit with an error code when
+        /// `run` is invoked for a script that isn't defined in the `scripts`
+        /// section of `package.json`.
+        #[arg(long, default_value_t = false)]
+        if_present: bool,
+
+        /// If set, `custard` won't run any pre or post scripts.
+        #[arg(long, default_value_t = false)]
+        ignore_scripts: bool,
     },
 
     /// Show the `package.json` path for this package.

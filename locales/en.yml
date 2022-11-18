@@ -37,3 +37,7 @@ init:
     git-repository-prompt: "Git repository"
     author-prompt: "Author"
     license-prompt: "License"
+
+en:
+  run:
+    script-not-found: "script `%{name}` was not found."

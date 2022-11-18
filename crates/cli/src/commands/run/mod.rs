@@ -20,6 +20,8 @@ pub async fn invoke(
     script_name: Option<String>,
     args: Option<Vec<String>>,
     script_shell: String,
+    if_present: bool,
+    ignore_scripts: bool,
     run_with_lifecycle_cmd: bool,
 ) -> Result<()> {
     let args = args.unwrap_or_default();
@@ -41,19 +43,23 @@ pub async fn invoke(
                 let pre_script_name = format!("pre{script_name}");
                 let post_script_name = format!("post{script_name}");
 
-                // Run prescript...
-                if let Some(script_content) = scripts.get(&pre_script_name) {
-                    run_script(&pre_script_name, script_content, &[], &script_shell).await?;
+                if !ignore_scripts {
+                    // Run prescript...
+                    if let Some(script_content) = scripts.get(&pre_script_name) {
+                        run_script(&pre_script_name, script_content, &[], &script_shell).await?;
+                    }
                 }
 
                 // ...then the script itself...
                 run_script(&script_name, script_content, &args, &script_shell).await?;
 
                 // ...and finally the postscript
-                if let Some(script_content) = scripts.get(&post_script_name) {
-                    run_script(&post_script_name, script_content, &[], &script_shell).await?;
+                if !ignore_scripts {
+                    if let Some(script_content) = scripts.get(&post_script_name) {
+                        run_script(&post_script_name, script_content, &[], &script_shell).await?;
+                    }
                 }
-            } else {
+            } else if !if_present {
                 user_error(
                     t!("run.script-not-found", name = &script_name),
                     exitcode::CONFIG,
