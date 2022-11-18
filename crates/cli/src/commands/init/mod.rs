@@ -1,27 +1,25 @@
 use std::env;
-use std::path::{Path, PathBuf};
 
 use bstr::BStr;
-use colored::Colorize;
 use custard_util::{fnv_map, get_current_dir_name, input};
-use dialoguer::{theme::ColorfulTheme, Confirm, Input};
+use dialoguer::{theme::ColorfulTheme, Input};
 use eyre::Result;
 use node_semver::Version;
 use package_json::{
     validate_package_name, validate_spdx, validate_version, PackageJson, Repository,
 };
 use rust_i18n::t;
-use serde_json::to_string_pretty;
 use slug::slugify;
-use tokio::fs::File;
-use tokio::io::AsyncWriteExt;
 
 use crate::consts::NO_TEST_SPECIFIED;
 
 mod default;
 mod git_remote;
+mod welcome;
+mod write;
 
 use git_remote::find_origin_remote;
+use write::write_package_json_prompt;
 
 pub async fn invoke(yes: bool) -> Result<()> {
     if yes {
@@ -30,13 +28,7 @@ pub async fn invoke(yes: bool) -> Result<()> {
         return Ok(());
     }
 
-    println!(
-        "{}",
-        t!("init.welcome.short", command = "`custard init`!")
-            .bold()
-            .purple()
-    );
-    println!("{}", t!("init.welcome.long"));
+    welcome::show();
 
     // Ask the questions
     let name = Input::with_theme(&ColorfulTheme::default())
@@ -101,52 +93,6 @@ pub async fn invoke(yes: bool) -> Result<()> {
     };
 
     write_package_json_prompt(package_json, true).await?;
-
-    Ok(())
-}
-
-async fn write(
-    file: &mut File,
-    package_json: &PackageJson,
-    package_json_path: &Path,
-) -> Result<()> {
-    file.write_all(to_string_pretty(&package_json)?.as_bytes())
-        .await?;
-
-    println!(
-        "{} `{}`",
-        t!("init.successfully-wrote-package-json-to").green().bold(),
-        package_json_path.to_string_lossy()
-    );
-
-    Ok(())
-}
-
-async fn get_package_json_file() -> Result<(File, PathBuf)> {
-    let current_dir = env::current_dir()?;
-    let path = current_dir.join("package.json");
-    let file = File::create(&path).await?;
-    Ok((file, path))
-}
-
-async fn write_package_json_prompt(
-    package_json: PackageJson,
-    ask_for_confirmation: bool,
-) -> Result<()> {
-    if ask_for_confirmation {
-        if Confirm::with_theme(&ColorfulTheme::default())
-            .with_prompt(&t!("init.write-package-json"))
-            .interact()?
-        {
-            let (mut file, path) = get_package_json_file().await?;
-            write(&mut file, &package_json, &path).await?;
-        } else {
-            eprintln!("{}", &t!("aborted-operation").red());
-        }
-    } else {
-        let (mut file, path) = get_package_json_file().await?;
-        write(&mut file, &package_json, &path).await?;
-    }
 
     Ok(())
 }

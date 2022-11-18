@@ -3,7 +3,6 @@
 ## General
 
 - The code's kinda bad imo
-- `rust-i18n` doesn't seem to be maintained, should we use a new crate?
 
 ## **src/consts.rs**
 
