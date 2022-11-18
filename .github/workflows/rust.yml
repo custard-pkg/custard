@@ -17,11 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: extractions/setup-just@v1
-    - name: Install Clippy
-      run: rustup component add clippy
     - name: Build
       run: just build
     - name: Run tests
       run: cargo test
-    - name: Run Clippy
-      run: cargo clippy --no-deps
