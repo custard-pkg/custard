@@ -3,3 +3,8 @@ members = ["crates/*"]
 
 [profile.dev]
 debug = 1
+
+[profile.release]
+lto = true
+strip = true
+split-debuginfo = "packed"
