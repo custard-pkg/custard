@@ -40,5 +40,5 @@ bstr = "1.0.1"
 assert_cmd = "2.0"
 predicates = "2.1"
 eyre = "0.6.8"
-assert_fs = "1.0.7"
+assert_fs = "1.0.10"
 serde-value-flatten = { git = "https://github.com/custard-pkg/rust-serde-value-flatten" }
