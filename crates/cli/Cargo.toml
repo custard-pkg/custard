@@ -34,7 +34,7 @@ custard_util = { path = "../custard_util" }
 package_json = { path = "../package_json" }
 git-url = "0.11.0"
 git-config = "0.12.0"
-bstr = "1.0.1"
+bstr = "1.1.0"
 
 [dev-dependencies]
 assert_cmd = "2.0"
