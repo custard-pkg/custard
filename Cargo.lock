@@ -709,6 +709,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "git-features"
+version = "0.25.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "510591428bb22671eb60f56430975718af88fdae55a1489d403005f74c0d3c25"
+dependencies = [
+ "git-hash",
+ "libc",
+]
+
+[[package]]
 name = "git-glob"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -826,13 +836,13 @@ dependencies = [
 
 [[package]]
 name = "git-url"
-version = "0.11.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7dbd91c55b1b03a833ff8278776fed272918cd61cd48efe9a97ad1fea7ef93ec"
+checksum = "3a6f4c5ba88ef911572dbf3c5c19212e72d1ce6dd924d933d7baa96a6d5f1cd6"
 dependencies = [
  "bstr 1.1.0",
- "git-features 0.24.0",
- "git-path 0.6.0",
+ "git-features 0.25.0",
+ "git-path 0.7.0",
  "home",
  "thiserror",
  "url",

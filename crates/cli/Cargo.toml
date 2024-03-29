@@ -32,7 +32,7 @@ tokio = { version = "1.25.0", features = [
 ] }
 custard_util = { path = "../custard_util" }
 package_json = { path = "../package_json" }
-git-url = "0.11.0"
+git-url = "0.12.0"
 git-config = "0.13.0"
 bstr = "1.1.0"
 
